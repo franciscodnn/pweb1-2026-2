@@ -225,6 +225,61 @@ class Aluno implements Pessoa {
 }
 ```
 
+### Principais diferenças
+
+- **Declaration merging**: `interface` com o mesmo nome se mescla automaticamente; `type` duplicado dá erro de identificador duplicado
+```typescript
+interface Janela {
+  titulo: string;
+}
+interface Janela {
+  largura: number;
+}
+// Janela agora tem título E largura (mesclados)
+
+// type NÃO permite isso:
+// type Janela = { titulo: string };
+// type Janela = { largura: number }; // Erro! Identificador duplicado
+```
+- **Extensão**: `interface` estende com `extends`; `type` compõe com `&` (interseção)
+```typescript
+interface Animal {
+  nome: string;
+}
+interface Cachorro extends Animal {
+  raca: string;
+}
+
+type AnimalT = { nome: string };
+type CachorroT = AnimalT & { raca: string };
+```
+- **O que pode representar**: `type` também aceita uniões, tuplas, primitivos e tipos de função; `interface` só descreve formas de objeto/classe
+```typescript
+type Direcao = "norte" | "sul" | "leste" | "oeste"; // união
+type Coordenada = [number, number];                  // tupla
+type Callback = (msg: string) => void;               // tipo de função
+```
+- **`implements`**: uma classe pode usar `implements` tanto com `interface` quanto com `type`, desde que o `type` resolva para um tipo de objeto (propriedades/métodos estaticamente conhecidos)
+```typescript
+type PessoaT = {
+  nome: string;
+  saudacao(): string;
+};
+
+class AlunoT implements PessoaT {  // OK, funciona igual a interface
+  nome = "Ana";
+  saudacao() {
+    return `Olá, meu nome é ${this.nome}`;
+  }
+}
+
+// Mas não funciona se o type não for uma forma de objeto:
+type Status = "ativo" | "inativo";
+// class X implements Status {}  // Erro!
+```
+
+> **Regra prática**: use `interface` para formas de objetos/classes que podem precisar ser estendidas ou mescladas; use `type` para uniões, tuplas, tipos de função, ou quando compor múltiplos tipos com `&`.
+
 ## Tipos Utilitários
 - **Readonly**: Evita modificações após a criação
 ```typescript
