@@ -41,5 +41,5 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
   },
-  "include": ["./tscode/functions.ts"]
+  "include": ["./tscode/objects.ts"]
 }
