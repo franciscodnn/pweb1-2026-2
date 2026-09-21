@@ -26,6 +26,22 @@ console.log(preco()); // 99.90
 
 Signals podem ser **graváveis** (`WritableSignal`) ou **somente leitura** (`Signal`).
 
+> Os exemplos desta aula seguem o **Angular 22**: componentes são *standalone* por padrão, então não é necessário declarar `standalone: true` no `@Component`.
+
+### Verificando se um valor é um signal
+
+```typescript
+import { signal, computed, isSignal, isWritableSignal } from '@angular/core';
+
+const contador = signal(0);
+const dobro = computed(() => contador() * 2);
+
+isSignal(contador);          // true
+isSignal(dobro);             // true
+isWritableSignal(contador);  // true
+isWritableSignal(dobro);     // false — computed é somente leitura
+```
+
 ---
 
 ## 2. Sinais Graváveis (Writable Signals)
@@ -51,7 +67,6 @@ import { Component, signal, computed } from '@angular/core';
 
 @Component({
   selector: 'app-carrinho',
-  standalone: true,
   template: `
     <div class="p-4 max-w-sm border rounded shadow">
       <h2 class="text-xl font-bold mb-2">Carrinho</h2>
@@ -79,6 +94,25 @@ export class CarrinhoComponent {
   adicionar() { this.quantidade.update(q => q + 1); }
   remover()   { this.quantidade.update(q => q - 1); }
 }
+```
+
+### Função de igualdade personalizada
+
+Por padrão, um signal só notifica seus consumidores quando o novo valor é diferente do anterior. Use a opção `equal` para definir o que significa "diferente":
+
+```typescript
+import { signal } from '@angular/core';
+
+interface Usuario {
+  id: number;
+  nome: string;
+}
+
+// Só notifica se o id mudar
+const usuario = signal<Usuario>(
+  { id: 1, nome: 'Ana' },
+  { equal: (a, b) => a.id === b.id }
+);
 ```
 
 ### Obtendo um Signal somente leitura com `asReadonly()`
@@ -114,22 +148,19 @@ São signals **somente leitura** que derivam seu valor de outros signals. Eles s
 
 ```typescript
 import { Component, signal, computed, WritableSignal, Signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-nome-completo',
-  standalone: true,
-  imports: [FormsModule],
   template: `
     <div class="p-4 max-w-sm space-y-3">
       <div class="flex flex-col gap-1">
         <label class="text-sm font-medium text-gray-700">Nome</label>
-        <input [(ngModel)]="nome"
+        <input #campoNome [value]="nome()" (input)="nome.set(campoNome.value)"
           class="border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
       </div>
       <div class="flex flex-col gap-1">
         <label class="text-sm font-medium text-gray-700">Sobrenome</label>
-        <input [(ngModel)]="sobrenome"
+        <input #campoSobrenome [value]="sobrenome()" (input)="sobrenome.set(campoSobrenome.value)"
           class="border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
       </div>
       <p class="text-gray-800">Nome completo: <strong class="text-blue-700">{{ nomeCompleto() }}</strong></p>
@@ -143,6 +174,8 @@ export class NomeCompletoComponent {
   nomeCompleto: Signal<string> = computed(() => `${this.nome()} ${this.sobrenome()}`);
 }
 ```
+
+> **Sem `ngModel`**: para ligar um `<input>` a um signal, use *property binding* em `[value]` (signal → tela) e o evento `(input)` (tela → signal). A variável de template (`#campo`) dá acesso tipado ao elemento, dispensando `$event.target` e o `FormsModule`.
 
 ### Dependências dinâmicas
 
@@ -166,15 +199,12 @@ Enquanto `mostrarDetalhes` for `false`, mudanças em `descricao` **não** reproc
 
 ```typescript
 import { Component, signal, computed } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-busca',
-  standalone: true,
-  imports: [FormsModule],
   template: `
     <div class="p-4 max-w-sm space-y-3">
-      <input [ngModel]="busca()" (ngModelChange)="busca.set($event)" placeholder="Buscar produto..."
+      <input #campoBusca [value]="busca()" (input)="busca.set(campoBusca.value)" placeholder="Buscar produto..."
         class="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
       <p class="text-sm text-gray-500">{{ resultados().length }} resultado(s)</p>
       <ul class="divide-y divide-gray-200 border rounded">
@@ -211,7 +241,6 @@ import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-abas-problema',
-  standalone: true,
   template: `
     <div class="p-4 max-w-sm space-y-3">
       <div class="flex gap-2">
@@ -254,7 +283,6 @@ import { Component, signal, linkedSignal } from '@angular/core';
 
 @Component({
   selector: 'app-abas',
-  standalone: true,
   template: `
     <div class="p-4 max-w-sm space-y-3">
       <div class="flex gap-2">
@@ -300,7 +328,6 @@ interface Categoria {
 
 @Component({
   selector: 'app-categorias',
-  standalone: true,
   template: `
     <div class="p-4 max-w-sm space-y-3">
       <h2 class="text-xl font-bold">Categorias</h2>
@@ -355,11 +382,42 @@ export class CategoriasComponent {
 }
 ```
 
+### Acessando o estado anterior
+
+No formato `source` + `computation`, o parâmetro `previous` expõe:
+
+- `previous.source`: valor anterior do signal de origem
+- `previous.value`: valor anterior do próprio `linkedSignal`
+
+### Igualdade personalizada com `equal`
+
+```typescript
+const copiaEdicao = linkedSignal(() => this.usuarioAtivo(), {
+  equal: (a, b) => a.id === b.id,
+});
+```
+
+### Personalizando o `set` com `set`
+
+A opção `set` altera o que acontece ao gravar no `linkedSignal`, por exemplo para propagar a mudança de volta à origem:
+
+```typescript
+const tempC = signal(25);
+
+const tempF = linkedSignal(() => (tempC() * 9) / 5 + 32, {
+  set: (valF) => tempC.set(((valF - 32) * 5) / 9),
+});
+
+tempF.set(212); // tempC passa a valer 100
+```
+
 ---
 
 ## 5. Efeitos (Effects)
 
 Um `effect` é uma operação que roda sempre que um ou mais signals mudam. Ele é indicado para **sincronizar estado com APIs não-reativas** (DOM, localStorage, bibliotecas de terceiros, etc.).
+
+Os effects são executados **de forma assíncrona, durante a detecção de mudanças**, e sempre rodam **pelo menos uma vez**.
 
 > **Regra de ouro**: sempre prefira `computed()` ou `linkedSignal()` antes de usar `effect()`.
 
@@ -367,27 +425,27 @@ Um `effect` é uma operação que roda sempre que um ou mais signals mudam. Ele 
 
 - ✅ Logging/Debugging de valores para analytics ou debugging
 - ✅ Salvar em `localStorage` ou `sessionStorage`
-- ✅ Integrar com bibliotecas externas (gráficos, mapas, etc.)
+- ✅ Sincronizar com `localStorage`, `sessionStorage` ou cookies
+- ✅ Comportamento customizado de DOM que não pode ser expresso no template
+- ✅ Renderização customizada (`<canvas>`, bibliotecas de gráficos, mapas, etc.)
 
 ### Quando **não** usar
 
 - ❌ Copiar valor de um signal para outro (use `computed`)
 - ❌ Derivar estado (use `computed` ou `linkedSignal`)
+- ❌ Propagar estado entre signals: pode causar `ExpressionChangedAfterItHasBeenChecked` e loops infinitos
 
 ### Exemplo — Persistência no localStorage
 
 ```typescript
 import { Component, signal, effect } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-notas',
-  standalone: true,
-  imports: [FormsModule],
   template: `
     <div class="p-4 max-w-md space-y-2">
       <h2 class="text-xl font-bold">Bloco de Notas</h2>
-      <textarea [ngModel]="nota()" (ngModelChange)="nota.set($event)" rows="5"
+      <textarea #campoNota [value]="nota()" (input)="nota.set(campoNota.value)" rows="5"
         class="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none">
       </textarea>
       <p class="text-xs text-gray-400">💾 Salvo automaticamente</p>
@@ -408,6 +466,8 @@ export class NotasComponent {
 
 ### Effect no construtor (padrão)
 
+Um `effect` exige um **contexto de injeção**. O local mais simples é o construtor de um componente ou serviço:
+
 ```typescript
 import { Component, signal, effect } from '@angular/core';
 
@@ -417,9 +477,28 @@ export class LogComponent {
 
   constructor() {
     effect(() => {
-      // Roda uma vez imediatamente e depois a cada mudança de pagina()
+      // Roda ao menos uma vez e depois a cada mudança de pagina()
       console.log(`Usuário navegou para: ${this.pagina()}`);
     });
+  }
+}
+```
+
+Fora do contexto de injeção, informe um `Injector` nas opções:
+
+```typescript
+import { Component, effect, inject, Injector, signal } from '@angular/core';
+
+@Component({ /* ... */ })
+export class ContadorComponent {
+  private readonly injector = inject(Injector);
+  readonly count = signal(0);
+
+  iniciarLog() {
+    effect(
+      () => { console.log(`The count is: ${this.count()}`); },
+      { injector: this.injector }
+    );
   }
 }
 ```
@@ -440,6 +519,22 @@ effect((onCleanup) => {
 });
 ```
 
+> Para *debounce* de signals, prefira a API [`debounced`](#6-signals-com-debounce-debounced) (seção 6) em vez de implementá-lo manualmente com `effect`.
+
+### Destruição manual com `EffectRef`
+
+O `effect` retorna um `EffectRef` com o método `destroy()`. Combinado à opção `manualCleanup`, permite controlar o ciclo de vida explicitamente:
+
+```typescript
+const ref = effect(
+  () => console.log(this.pagina()),
+  { injector: this.injector, manualCleanup: true }
+);
+
+// depois, quando não for mais necessário
+ref.destroy();
+```
+
 ### Lendo sem rastrear com `untracked`
 
 ```typescript
@@ -455,7 +550,70 @@ effect(() => {
 });
 ```
 
-## 6. Contexto Reativo
+### Operações de DOM com `afterRenderEffect`
+
+Effects comuns rodam **antes** de o DOM ser atualizado. Para ler/escrever no DOM **após a renderização**, use `afterRenderEffect`, que organiza a execução em fases:
+
+| Fase | Uso |
+|---|---|
+| `earlyRead` | Ler o DOM antes de escritas |
+| `write` | Apenas modificar o DOM |
+| `mixedReadWrite` | Ler e escrever ao mesmo tempo (fase padrão) |
+| `read` | Apenas ler o DOM |
+
+> Se nenhuma fase for informada, o callback roda em `mixedReadWrite`, o que pode prejudicar a performance. Prefira separar leituras e escritas.
+
+`afterRenderEffect` roda **apenas no cliente** (não no servidor), e não há garantia de que o componente já tenha sido hidratado quando o callback executa.
+
+---
+
+## 6. Signals com Debounce (`debounced`)
+
+> ⚠️ API **experimental**: pode mudar antes de se tornar estável.
+
+`debounced` atrasa a reação a mudanças de um signal. Ele recebe um signal de origem e o tempo de espera, e retorna um **`Resource`** cujo valor reflete o signal de origem já "debounced". É útil, por exemplo, em campos de busca, evitando processar a cada tecla digitada.
+
+```typescript
+import { Component, debounced, signal } from '@angular/core';
+
+@Component({
+  selector: 'app-busca-debounce',
+  template: `
+    <input #campo [value]="query()" (input)="query.set(campo.value)" placeholder="Buscar..." />
+    <p>Digitado: {{ query() }}</p>
+    <p>Após debounce: {{ debouncedQuery.value() }}</p>
+    @if (debouncedQuery.status() === 'loading') {
+      <p>Aguardando...</p>
+    }
+  `,
+})
+export class BuscaDebounceComponent {
+  query = signal('');
+  debouncedQuery = debounced(this.query, 300); // espera 300 ms
+}
+```
+
+### Status e valor
+
+- Enquanto o temporizador está correndo, `status()` é `'loading'` e `value()` mantém o **último valor resolvido**
+- Ao expirar, `status()` passa para `'resolved'`
+- Se o signal de origem lançar erro, `status()` vira `'error'` imediatamente, sem esperar
+
+### Tempo de espera customizado
+
+Em vez de milissegundos, é possível passar uma **função que retorna `Promise<void>`**. Ela recebe o valor atual e o último *snapshot*, permitindo lógicas como atraso dinâmico conforme a entrada ou tratamento após erros.
+
+### Igualdade
+
+Por padrão usa `Object.is`; use a opção `equal` para comparações customizadas.
+
+### Contexto de injeção
+
+`debounced` deve ser chamado em um contexto de injeção (por exemplo, na inicialização de campos ou no construtor). Fora dele, informe um `Injector` nas opções. O Angular destrói o resource e cancela temporizadores pendentes quando o injector é destruído.
+
+---
+
+## 7. Contexto Reativo
 
 Um **contexto reativo** é um ambiente onde o Angular monitora automaticamente quais signals são lidos para estabelecer dependências. Quando um signal rastreado muda, o Angular re-executa o consumidor.
 
@@ -520,21 +678,37 @@ effect(async () => {
 });
 ```
 
+### Garantindo que não há contexto reativo
+
+`assertNotInReactiveContext()` lança um erro se a função for chamada dentro de um contexto reativo. É útil em APIs que não devem ser executadas em `computed`/`effect`:
+
+```typescript
+import { assertNotInReactiveContext } from '@angular/core';
+
+function salvar(dado: string) {
+  assertNotInReactiveContext(salvar);
+  // ...
+}
+```
+
 ---
 
-## 7. Resumo: Qual API usar?
+## 8. Resumo: Qual API usar?
 
 | API | Gravável? | Quando usar |
 |---|---|---|
 | `signal()` | ✅ Sim | Estado independente |
 | `computed()` | ❌ Não | Valor derivado de outros signals |
 | `linkedSignal()` | ✅ Sim | Estado derivado que também pode ser modificado |
+| `debounced()` | ❌ Não | Atrasar a reação a mudanças de um signal (experimental) |
 | `effect()` | N/A | Sincronizar com APIs não-reativas (última opção) |
+| `afterRenderEffect()` | N/A | Ler/escrever no DOM após a renderização (somente cliente) |
 
 ---
 
 ## Referências
 
-- [Angular Signals](https://next.angular.dev/guide/signals)
-- [linkedSignal](https://next.angular.dev/guide/signals/linked-signal)
-- [Effects](https://next.angular.dev/guide/signals/effect)
+- [Angular Signals](https://angular.dev/guide/signals)
+- [linkedSignal](https://angular.dev/guide/signals/linked-signal)
+- [Debounced](https://angular.dev/guide/signals/debounced)
+- [Effects](https://angular.dev/guide/signals/effect)
