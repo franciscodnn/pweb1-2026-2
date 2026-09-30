@@ -8,6 +8,7 @@ import { Component, signal } from '@angular/core';
 })
 export class Contador {
   public contador = signal(0);
+  
   public contadorDuplicado = ( () => this.contador() * 2);
 
   public incrementar(): void {

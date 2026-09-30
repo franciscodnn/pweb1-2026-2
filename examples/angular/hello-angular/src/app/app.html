@@ -1,9 +1,53 @@
-<h1 class="underline decoration-red-600">
+<div class="p-6 max-w-sm space-y-4">
+  <h2 class="text-xl font-bold">Avalie o produto</h2>
+  <app-avaliacao (notaSelecionada)="registrarNota($event)" />
+
+  @if (mensagem()) {
+    <p class="text-green-700 font-medium">{{ mensagem() }}</p>
+  }
+</div>
+<hr />
+
+<div class="p-6 max-w-sm space-y-4">
+  <h2 class="text-xl font-bold text-gray-800">Cadastro</h2>
+
+  <!-- [(valor)] usa o two-way binding gerado automaticamente pelo model() -->
+
+  <app-campo rotulo="Nome" [(valor)]="nome" />
+  <app-campo rotulo="Sobrenome" [(valor)]="sobrenome" />
+
+  <div class="p-3 bg-blue-50 border border-blue-200 rounded">
+    <p class="text-sm text-blue-800">
+      Nome completo: <strong>{{ nomeCompleto() }}</strong>
+    </p>
+  </div>
+</div>
+
+
+<!--
+<div class="min-h-screen bg-gray-100 p-8">
+  <app-perfil tempo="4" nome="Danilo" cargo="Desenvolvedor Front-end" />
+  <app-perfil tempo="8" nome="Maria Luiza" cargo="Desenvolvedora Back-end" />
+  <app-perfil tempo="10" nome="Paulo" cargo="Gerente" />
+</div>
+-->
+
+<!-- <h1 class="underline decoration-red-600">
   Hello, World!
-</h1>
+</h1> -->
+
+<!-- <app-nome-completo></app-nome-completo> -->
+
+<!--
+<app-abas></app-abas>
+
+  
+
+<app-carrinho></app-carrinho>
 
 <p>
   O título do projeto é {{ titulo() }}!
 </p>
 
 <app-contador></app-contador>
+-->

@@ -1,8 +1,15 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, computed, OnInit } from '@angular/core';
 import { Contador } from './contador/contador';
+import { Carrinho } from './carrinho/carrinho';
+import { NomeCompletoComponent } from './nome-completo/nome-completo';
+import { Abas } from './abas/abas';
+import { PerfilComponent } from './aula_componentes/perfil/perfil';
+import { CampoComponent } from './aula_componentes/campo/campo';
+import { AvaliacaoComponent } from './aula_componentes/avaliacao/avaliacao';
 
 @Component({
-  imports: [Contador],
+  // imports: [CampoComponent, PerfilComponent, Contador, Carrinho, NomeCompletoComponent, Abas],
+  imports: [AvaliacaoComponent, CampoComponent],
   selector: 'app-root',
   templateUrl: './app.html',
   // template: `
@@ -10,6 +17,21 @@ import { Contador } from './contador/contador';
   // `
   
 })
-export class App {
-  titulo = signal('HelloAngular 2026.2');
+export class App implements OnInit {
+  mensagem = signal('');
+
+  registrarNota(nota: number) {
+    this.mensagem.set(`Você deu ${nota} estrela(s). Obrigado!`);
+  }
+
+  // titulo = signal('HelloAngular 2026.2');
+
+  nome      = signal('teste');
+  sobrenome = signal('');
+
+  nomeCompleto = computed(() => `${this.nome()} ${this.sobrenome()}`.trim());
+
+  ngOnInit() {
+    console.log('Inputs inicializadas');
+  }
 }
