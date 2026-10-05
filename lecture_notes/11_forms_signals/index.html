@@ -1,0 +1,2211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 11 - Signal Forms</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .nav-links a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            transform: translateY(-2px);
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .topic {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .topic h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .topic h3 {
+            color: #34495e;
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+        }
+
+        .topic h4 {
+            color: #5a6c7d;
+            margin-bottom: 0.6rem;
+            font-size: 1.2rem;
+        }
+
+        .topic p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        .topic ul, .topic ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .topic li {
+            margin-bottom: 0.5rem;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+            border-left: 4px solid #667eea;
+        }
+
+        .code-block code {
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin: 1rem 0;
+        }
+
+        .warning {
+            background: linear-gradient(45deg, rgba(255, 193, 7, 0.1), rgba(255, 138, 0, 0.1));
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin: 1rem 0;
+        }
+
+        .tip {
+            background: linear-gradient(45deg, rgba(40, 167, 69, 0.1), rgba(57, 181, 74, 0.1));
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            margin: 1rem 0;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links a {
+                display: block;
+                margin: 5px 0;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+            }
+        }
+
+        pre.code-block {
+            white-space: pre;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        pre.code-block code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        .topic p code, .topic li code, .topic td code, .tip code, .warning code {
+            background: rgba(102, 126, 234, 0.12);
+            padding: 0.1rem 0.35rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .comparison-table th code {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tip p, .warning p, .highlight p {
+            margin-bottom: 0;
+        }
+
+        .topic {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 Aula 11 - Formulários com Signals em Angular v22 (Signal Forms)</h1>
+            <p>Formulários reativos, tipados e validados com o novo recurso de signals</p>
+        </div>
+
+        <div class="nav-links">
+            <a href="../index.html">🏠 Início</a>
+            <a href="../11_forms/index.html">← Aula 11 (Reactive Forms)</a>
+            <a href="../12_angular_http_client/index.html">Aula 12 →</a>
+        </div>
+
+        <div class="content">
+<div class="topic">
+<h2>Introdução</h2>
+<p>Os formulários são parte essencial de qualquer aplicação web. Até a versão 20, o Angular oferecia duas abordagens: <strong>template-driven forms</strong> e <strong>reactive forms</strong> (vistas na <a href="../11_forms/index.html">aula anterior</a>). A partir da v21, o Angular passou a oferecer uma terceira abordagem, construída sobre <strong>signals</strong>: os <strong>Signal Forms</strong>.</p>
+<p>Construir formulários envolve várias preocupações interligadas: guardar os valores digitados, validar a entrada, controlar os estados de erro e manter a interface sincronizada com os dados. Os Signal Forms tratam dessas preocupações com:</p>
+<ul><li><strong>Sincronização automática</strong>: o modelo de dados (um <code>signal</code>) e os campos da tela ficam sempre sincronizados, nos dois sentidos;</li><li><strong>Segurança de tipos</strong>: o formulário é inferido a partir do tipo do modelo, então o acesso a um campo inexistente é erro de compilação;</li><li><strong>Validação centralizada</strong>: todas as regras ficam em um único lugar, a <strong>função de schema</strong>.</li></ul>
+<table class="comparison-table"><thead><tr><th>Conceito</th><th>Reactive Forms</th><th>Signal Forms</th></tr></thead><tbody><tr><td>Onde ficam os dados</td><td>Dentro de <code>FormControl</code>/<code>FormGroup</code></td><td>Em um <code>signal()</code> comum, criado por você</td></tr><tr><td>Criação do formulário</td><td><code>new FormGroup({...})</code> ou <code>FormBuilder</code></td><td><code>form(modelo, schema?)</code></td></tr><tr><td>Ligação com o template</td><td><code>[formGroup]</code> + <code>formControlName</code></td><td><code>[formField]="meuForm.campo"</code></td></tr><tr><td>Validação</td><td><code>Validators</code> em cada controle</td><td>Função de schema: <code>required(path.campo)</code></td></tr><tr><td>Reatividade</td><td><code>Observable</code> (<code>valueChanges</code>)</td><td>Signals (<code>value()</code>, <code>valid()</code>, <code>errors()</code>)</td></tr></tbody></table>
+<div class="tip"><p>💡 <strong>Dica:</strong> os Signal Forms são a escolha recomendada para aplicações novas construídas com signals. Em projetos que já usam reactive forms, eles continuam sendo uma opção válida.</p></div>
+</div>
+<div class="topic">
+<h2>1. Configuração Inicial</h2>
+<h3>Criando o projeto</h3>
+<p>Os Signal Forms já fazem parte do pacote <code>@angular/forms</code> e são importados de <code>@angular/forms/signals</code>.</p>
+<pre class="code-block"><code>ng new app-signal-forms
+cd app-signal-forms
+ng version   # Angular v22 (Signal Forms exigem v21 ou superior)</code></pre>
+<h3>Tailwind CSS</h3>
+<p>Todos os exemplos desta aula são estilizados com <a href="https://tailwindcss.com/docs/installation/framework-guides/angular">Tailwind CSS</a> (v4). Para configurá-lo:</p>
+<pre class="code-block"><code>npm install tailwindcss @tailwindcss/postcss postcss</code></pre>
+<p>Crie o arquivo <code>.postcssrc.json</code> na raiz do projeto:</p>
+<pre class="code-block"><code>{
+  "plugins": {
+    "@tailwindcss/postcss": {}
+  }
+}</code></pre>
+<p>E importe o Tailwind no arquivo de estilos globais:</p>
+<pre class="code-block"><code>/* src/styles.css */
+@import "tailwindcss";</code></pre>
+<p>Nos exemplos, repetimos sempre o mesmo conjunto de classes utilitárias:</p>
+<table class="comparison-table"><thead><tr><th>Elemento</th><th>Classes</th></tr></thead><tbody><tr><td>Cartão do formulário</td><td><code>mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md</code></td></tr><tr><td>Rótulo (<code>&lt;label&gt;</code>)</td><td><code>block text-sm font-medium text-gray-700</code></td></tr><tr><td>Campo (<code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, <code>&lt;textarea&gt;</code>)</td><td><code>w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200</code></td></tr><tr><td>Mensagem de erro</td><td><code>mt-1 text-sm text-red-600</code></td></tr><tr><td>Botão principal</td><td><code>rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50</code></td></tr><tr><td>Botão secundário</td><td><code>rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100</code></td></tr><tr><td>Checkbox</td><td><code>size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500</code></td></tr></tbody></table>
+<h3>Configuração da aplicação</h3>
+<p>Os exemplos de validação assíncrona usam <code>HttpClient</code>; por isso, registre <code>provideHttpClient()</code>:</p>
+<pre class="code-block"><code>// src/app/app.config.ts
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideRouter(routes),
+    provideHttpClient(),
+  ],
+};</code></pre>
+<h3>Como testar os exemplos</h3>
+<p>Cada exemplo abaixo é um <strong>arquivo completo</strong>; a primeira linha de cada bloco indica onde salvá-lo (todos ficam em <code>src/app/exemplos/</code>). Para ver um exemplo funcionando, importe o componente no <code>App</code> e use o seu seletor no template:</p>
+<pre class="code-block"><code>// src/app/app.ts
+import { Component } from '@angular/core';
+import { MeuForm } from './exemplos/meu-form/meu-form';
+
+@Component({
+  selector: 'app-root',
+  imports: [MeuForm],
+  template: `
+    &lt;main class="min-h-screen bg-gray-100 px-4 py-10"&gt;
+      &lt;app-meu-form /&gt;
+    &lt;/main&gt;
+  `,
+})
+export class App {}</code></pre>
+<div class="tip"><p>💡 <strong>Dica:</strong> como o <code>App</code> acima usa <code>template</code> em vez de <code>templateUrl</code>, os arquivos <code>app.html</code> e <code>app.css</code> gerados pelo <code>ng new</code> deixam de ser usados e podem ser apagados.</p></div>
+<h3>Primeiro formulário</h3>
+<p>O exemplo mínimo: um modelo (<code>signal</code>), o formulário (<code>form()</code>) e a diretiva <code>FormField</code> importada no componente para ligar o campo ao <code>&lt;input&gt;</code>:</p>
+<pre class="code-block"><code>// src/app/exemplos/meu-form/meu-form.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-meu-form',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;h2 class="text-xl font-semibold text-gray-800"&gt;Meu primeiro Signal Form&lt;/h2&gt;
+      &lt;label class="block text-sm font-medium text-gray-700"&gt;
+        Nome
+        &lt;input [formField]="meuForm.nome" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;/label&gt;
+      &lt;p class="text-gray-600"&gt;Olá, &lt;strong&gt;{{ meuModel().nome }}&lt;/strong&gt;!&lt;/p&gt;
+    &lt;/div&gt;
+  `,
+})
+export class MeuForm {
+  meuModel = signal({ nome: '' });
+  meuForm = form(this.meuModel);
+}</code></pre>
+<p>Principais elementos da API:</p>
+<table class="comparison-table"><thead><tr><th>Elemento</th><th>Para que serve</th></tr></thead><tbody><tr><td><code>form()</code></td><td>Cria o formulário (a <em>field tree</em>) a partir de um signal</td></tr><tr><td><code>[formField]</code></td><td>Diretiva que liga um campo a um <code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, <code>&lt;textarea&gt;</code>...</td></tr><tr><td><code>[formRoot]</code></td><td>Diretiva para o <code>&lt;form&gt;</code>, cuida do envio (<em>submit</em>)</td></tr><tr><td><code>required</code>, <code>email</code>, <code>min</code>, <code>max</code>, <code>minLength</code>, <code>maxLength</code>, <code>pattern</code></td><td>Validadores prontos</td></tr><tr><td><code>validate</code>, <code>validateTree</code>, <code>validateHttp</code></td><td>Validadores personalizados (síncronos e assíncronos)</td></tr><tr><td><code>disabled</code>, <code>hidden</code>, <code>readonly</code></td><td>Regras de disponibilidade dos campos</td></tr><tr><td><code>applyWhen</code>, <code>applyEach</code>, <code>schema</code>, <code>apply</code></td><td>Composição de regras (condicionais, arrays, reuso)</td></tr><tr><td><code>submit()</code></td><td>Marca tudo como <em>touched</em> e executa a ação se o formulário for válido</td></tr></tbody></table>
+<h3>Reaproveitando classes com <code>@apply</code></h3>
+<p>Para não repetir listas longas de classes, crie classes próprias com <code>@apply</code> no CSS do componente. No Tailwind v4, o CSS do componente precisa de <code>@reference</code> para enxergar as classes do Tailwind:</p>
+<pre class="code-block"><code>// src/app/exemplos/login-apply/login-apply.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-login-apply',
+  imports: [FormField],
+  templateUrl: './login-apply.html',
+  styleUrl: './login-apply.css',
+})
+export class LoginApply {
+  loginModel = signal({ email: '', senha: '' });
+  loginForm = form(this.loginModel);
+}</code></pre>
+<pre class="code-block"><code>&lt;!-- src/app/exemplos/login-apply/login-apply.html --&gt;
+&lt;div class="cartao"&gt;
+  &lt;label class="rotulo"&gt;
+    E-mail
+    &lt;input type="email" [formField]="loginForm.email" class="campo" /&gt;
+  &lt;/label&gt;
+  &lt;label class="rotulo"&gt;
+    Senha
+    &lt;input type="password" [formField]="loginForm.senha" class="campo" /&gt;
+  &lt;/label&gt;
+&lt;/div&gt;</code></pre>
+<pre class="code-block"><code>/* src/app/exemplos/login-apply/login-apply.css */
+@reference "tailwindcss";
+
+.cartao {
+  @apply mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md;
+}
+
+.rotulo {
+  @apply block text-sm font-medium text-gray-700;
+}
+
+.campo {
+  @apply mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200;
+}</code></pre>
+</div>
+<div class="topic">
+<h2>2. Modelo do Formulário (Form Model)</h2>
+<p>O <strong>modelo do formulário</strong> é a base dos Signal Forms: ele é a <strong>única fonte de verdade</strong> dos dados. Trata-se simplesmente de um <em>writable signal</em> criado com <code>signal()</code>.</p>
+<div class="warning"><p>⚠️ <strong>Atenção:</strong> o modelo do formulário não tem relação com a função <code>model()</code> usada para <em>two-way binding</em> entre componentes pai e filho (aula de componentes). Aqui, o modelo é um <code>signal()</code> comum que guarda os dados do formulário.</p></div>
+<h3>Criando o modelo e o formulário</h3>
+<pre class="code-block"><code>// src/app/exemplos/login/login.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-login',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;h2 class="text-xl font-semibold text-gray-800"&gt;Login&lt;/h2&gt;
+
+      &lt;label class="block text-sm font-medium text-gray-700"&gt;
+        E-mail
+        &lt;input type="email" [formField]="loginForm.email" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;/label&gt;
+
+      &lt;label class="block text-sm font-medium text-gray-700"&gt;
+        Senha
+        &lt;input type="password" [formField]="loginForm.password" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;/label&gt;
+    &lt;/div&gt;
+  `,
+})
+export class Login {
+  loginModel = signal({
+    email: '',
+    password: '',
+  });
+
+  loginForm = form(this.loginModel);
+}</code></pre>
+<p>A função <code>form()</code> recebe o signal e cria uma <strong>field tree</strong> (árvore de campos), que espelha o formato do modelo. Essa árvore é:</p>
+<ul><li><strong>Navegável</strong>: acessamos os campos filhos com ponto, por exemplo <code>loginForm.email</code>;</li><li><strong>Invocável</strong>: chamamos o campo como função para obter o seu estado, por exemplo <code>loginForm.email()</code>.</li></ul>
+<p>A diretiva <code>[formField]</code> liga cada <code>&lt;input&gt;</code> ao campo correspondente, com sincronização automática nos dois sentidos.</p>
+<h3>Tipando o modelo</h3>
+<p>O TypeScript infere o tipo a partir do objeto literal, mas definir uma interface deixa o código mais claro e melhora o IntelliSense. Com o tipo explícito, <code>loginForm.email</code> é um <code>FieldTree&lt;string&gt;</code>, e acessar um campo inexistente é erro de compilação:</p>
+<pre class="code-block"><code>// src/app/exemplos/login-tipado/login-tipado.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
+
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+@Component({
+  selector: 'app-login-tipado',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input type="email" [formField]="loginForm.email" placeholder="E-mail"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;input type="password" [formField]="loginForm.password" placeholder="Senha"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;!-- &lt;input [formField]="loginForm.username" /&gt;  ❌ erro: 'username' não existe --&gt;
+    &lt;/div&gt;
+  `,
+})
+export class LoginTipado {
+  loginModel = signal&lt;LoginData&gt;({
+    email: '',
+    password: '',
+  });
+
+  loginForm = form(this.loginModel);
+}</code></pre>
+<h3>Inicializando todos os campos</h3>
+<p>O formulário é derivado do modelo: um campo sem valor inicial <strong>não existe</strong> na field tree. Para campos "opcionais", use um valor vazio explícito, nunca <code>undefined</code>:</p>
+<ul><li><code>''</code> para controles de texto (<code>&lt;input type="text"&gt;</code>, <code>&lt;textarea&gt;</code>), que não aceitam <code>null</code>;</li><li><code>null</code> para controles que aceitam ausência de valor, como <code>&lt;input type="date"&gt;</code> com <code>Date | null</code>.</li></ul>
+<pre class="code-block"><code>// src/app/exemplos/usuario-inicial/usuario-inicial.ts
+import { Component, signal } from '@angular/core';
+import { JsonPipe } from '@angular/common';
+import { form, FormField } from '@angular/forms/signals';
+
+interface UsuarioData {
+  nome: string;
+  email: string;
+  idade: number;
+  telefone: string;              // opcional: vazio = ''
+  dataNascimento: Date | null;   // opcional: vazio = null
+}
+
+@Component({
+  selector: 'app-usuario-inicial',
+  imports: [FormField, JsonPipe],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input [formField]="usuarioForm.nome" placeholder="Nome" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;input type="email" [formField]="usuarioForm.email" placeholder="E-mail"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;input type="number" [formField]="usuarioForm.idade" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;input type="tel" [formField]="usuarioForm.telefone" placeholder="Telefone (opcional)"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;input type="date" [formField]="usuarioForm.dataNascimento" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;pre class="overflow-x-auto rounded-lg bg-gray-900 p-3 text-xs text-green-300"&gt;{{ usuarioModel() | json }}&lt;/pre&gt;
+    &lt;/div&gt;
+  `,
+})
+export class UsuarioInicial {
+  // ✅ Correto: todos os campos inicializados
+  usuarioModel = signal&lt;UsuarioData&gt;({
+    nome: '',
+    email: '',
+    idade: 0,
+    telefone: '',
+    dataNascimento: null,
+  });
+
+  // ❌ Evite: signal({ nome: '', email: '' }) não teria usuarioForm.idade
+  usuarioForm = form(this.usuarioModel);
+}</code></pre>
+<h3>Lendo valores</h3>
+<p>Há duas formas de ler os dados: pelo <strong>estado do campo</strong> (<code>campo().value()</code>), ideal para valores individuais e <code>computed()</code>, ou pelo <strong>próprio modelo</strong> (<code>modelo()</code>), ideal quando precisamos de todos os dados (por exemplo, no envio):</p>
+<pre class="code-block"><code>// src/app/exemplos/leitura/leitura.ts
+import { Component, computed, signal } from '@angular/core';
+import { JsonPipe } from '@angular/common';
+import { form, FormField } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-leitura',
+  imports: [FormField, JsonPipe],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input type="email" [formField]="loginForm.email" placeholder="E-mail"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;input type="password" [formField]="loginForm.password" placeholder="Senha"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+
+      &lt;div class="rounded-lg bg-gray-50 p-3 text-sm text-gray-600"&gt;
+        &lt;p&gt;E-mail atual: &lt;span class="font-mono"&gt;{{ loginForm.email().value() }}&lt;/span&gt;&lt;/p&gt;
+        &lt;p&gt;Tamanho da senha: &lt;span class="font-semibold"&gt;{{ tamanhoSenha() }}&lt;/span&gt;&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;button type="button" (click)="lerTudo()" class="rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"&gt;Ler o modelo inteiro&lt;/button&gt;
+      @if (dadosLidos(); as dados) {
+        &lt;pre class="overflow-x-auto rounded-lg bg-gray-900 p-3 text-xs text-green-300"&gt;{{ dados | json }}&lt;/pre&gt;
+      }
+    &lt;/div&gt;
+  `,
+})
+export class Leitura {
+  loginModel = signal({ email: '', password: '' });
+  loginForm = form(this.loginModel);
+
+  // 1) Pelo estado do campo
+  tamanhoSenha = computed(() =&gt; this.loginForm.password().value().length);
+
+  // 2) Pelo próprio modelo
+  dadosLidos = signal&lt;{ email: string; password: string } | null&gt;(null);
+
+  lerTudo() {
+    const dados = this.loginModel();
+    console.log(dados.email, dados.password);
+    this.dadosLidos.set(dados);
+  }
+}</code></pre>
+<h3>Atualizando valores por código</h3>
+<p>Podemos substituir o modelo inteiro com <code>set()</code> (ex.: dados vindos de uma API ou <em>reset</em>) ou atualizar apenas um campo com <code>campo().value.set()</code>/<code>update()</code>. Nos dois casos, a tela é atualizada automaticamente:</p>
+<pre class="code-block"><code>// src/app/exemplos/atualizacao/atualizacao.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
+
+interface Usuario {
+  nome: string;
+  email: string;
+  idade: number;
+}
+
+@Component({
+  selector: 'app-atualizacao',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input [formField]="usuarioForm.nome" placeholder="Nome" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;input type="email" [formField]="usuarioForm.email" placeholder="E-mail"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;input type="number" [formField]="usuarioForm.idade" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+
+      &lt;div class="flex flex-wrap gap-2"&gt;
+        &lt;button type="button" (click)="carregarUsuario()" class="rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"&gt;Carregar&lt;/button&gt;
+        &lt;button type="button" (click)="limparEmail()" class="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"&gt;Limpar e-mail&lt;/button&gt;
+        &lt;button type="button" (click)="incrementarIdade()" class="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"&gt;Idade + 1&lt;/button&gt;
+        &lt;button type="button" (click)="limpar()" class="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"&gt;Limpar tudo&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  `,
+})
+export class Atualizacao {
+  usuarioModel = signal&lt;Usuario&gt;({ nome: '', email: '', idade: 0 });
+  usuarioForm = form(this.usuarioModel);
+
+  // Substituindo o modelo inteiro
+  carregarUsuario() {
+    this.usuarioModel.set({ nome: 'Alice', email: 'alice@ifpb.edu.br', idade: 30 });
+  }
+
+  limpar() {
+    this.usuarioModel.set({ nome: '', email: '', idade: 0 });
+  }
+
+  // Atualizando apenas um campo (a mudança é propagada para o modelo)
+  limparEmail() {
+    this.usuarioForm.email().value.set('');
+  }
+
+  incrementarIdade() {
+    this.usuarioForm.idade().value.update((idade) =&gt; idade + 1);
+  }
+}</code></pre>
+<h3>Two-way binding</h3>
+<p>Com <code>[formField]</code>, os dados fluem nos dois sentidos sem nenhuma inscrição (<em>subscribe</em>) ou tratamento de eventos manual:</p>
+<ul><li><strong>Usuário → modelo</strong>: o usuário digita, a diretiva detecta, o estado do campo e o signal do modelo são atualizados;</li><li><strong>Código → tela</strong>: o código chama <code>set()</code>/<code>update()</code>, o signal notifica e a diretiva atualiza o <code>&lt;input&gt;</code>.</li></ul>
+<pre class="code-block"><code>// src/app/exemplos/two-way/two-way.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-two-way',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input type="text" [formField]="usuarioForm.nome" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;button type="button" (click)="definirNome('Maria')" class="rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"&gt;
+        Definir nome como Maria
+      &lt;/button&gt;
+      &lt;p class="text-gray-600"&gt;Nome atual: &lt;strong&gt;{{ usuarioModel().nome }}&lt;/strong&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  `,
+})
+export class TwoWay {
+  usuarioModel = signal({ nome: '' });
+  usuarioForm = form(this.usuarioModel);
+
+  definirNome(nome: string) {
+    this.usuarioForm.nome().value.set(nome); // o input passa a exibir "Maria"
+  }
+}</code></pre>
+<h3>Objetos aninhados</h3>
+<p>Campos relacionados (como um endereço) podem ser agrupados em objetos. O acesso segue o caminho do objeto, e não é necessário nada equivalente ao <code>formGroupName</code>:</p>
+<pre class="code-block"><code>// src/app/exemplos/perfil-aninhado/perfil-aninhado.ts
+import { Component, signal } from '@angular/core';
+import { JsonPipe } from '@angular/common';
+import { form, FormField } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-perfil-aninhado',
+  imports: [FormField, JsonPipe],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input [formField]="perfilForm.nome" placeholder="Nome" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+
+      &lt;fieldset class="space-y-3 rounded-lg border border-gray-200 p-4"&gt;
+        &lt;legend class="px-1 text-sm font-semibold text-gray-700"&gt;Endereço&lt;/legend&gt;
+        &lt;input [formField]="perfilForm.endereco.rua" placeholder="Rua" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+        &lt;input [formField]="perfilForm.endereco.cidade" placeholder="Cidade" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;/fieldset&gt;
+
+      &lt;fieldset class="space-y-3 rounded-lg border border-gray-200 p-4"&gt;
+        &lt;legend class="px-1 text-sm font-semibold text-gray-700"&gt;Preferências&lt;/legend&gt;
+        &lt;select [formField]="perfilForm.preferencias.tema" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"&gt;
+          &lt;option value="claro"&gt;Claro&lt;/option&gt;
+          &lt;option value="escuro"&gt;Escuro&lt;/option&gt;
+        &lt;/select&gt;
+        &lt;label class="flex items-center gap-2 text-sm text-gray-700"&gt;
+          &lt;input type="checkbox" [formField]="perfilForm.preferencias.notificacoes"
+                 class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" /&gt;
+          Receber notificações
+        &lt;/label&gt;
+      &lt;/fieldset&gt;
+
+      &lt;pre class="overflow-x-auto rounded-lg bg-gray-900 p-3 text-xs text-green-300"&gt;{{ perfilModel() | json }}&lt;/pre&gt;
+    &lt;/div&gt;
+  `,
+})
+export class PerfilAninhado {
+  perfilModel = signal({
+    nome: '',
+    endereco: { rua: '', cidade: '' },
+    preferencias: { tema: 'claro', notificacoes: true },
+  });
+
+  perfilForm = form(this.perfilModel);
+}</code></pre>
+<h3>Arrays</h3>
+<p>Arrays substituem o <code>FormArray</code>. Para adicionar ou remover itens, basta <strong>atualizar o modelo</strong>. No <code>@for</code>, rastreie (<code>track</code>) pelo próprio campo, pois o Angular já mantém uma identidade estável para cada item:</p>
+<pre class="code-block"><code>// src/app/exemplos/habilidades/habilidades.ts
+import { Component, signal } from '@angular/core';
+import { JsonPipe } from '@angular/common';
+import { form, FormField } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-habilidades',
+  imports: [FormField, JsonPipe],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;h2 class="text-xl font-semibold text-gray-800"&gt;Habilidades&lt;/h2&gt;
+
+      @for (habilidade of habForm.habilidades; track habilidade; let i = $index) {
+        &lt;div class="flex gap-2"&gt;
+          &lt;input [formField]="habilidade" placeholder="Habilidade {{ i + 1 }}"
+                 class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+          &lt;button type="button" (click)="remover(i)"
+                  class="rounded-lg px-3 text-sm text-red-600 hover:bg-red-50"&gt;
+            Remover
+          &lt;/button&gt;
+        &lt;/div&gt;
+      }
+      &lt;button type="button" (click)="adicionar()" class="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"&gt;
+        + Adicionar habilidade
+      &lt;/button&gt;
+
+      &lt;pre class="overflow-x-auto rounded-lg bg-gray-900 p-3 text-xs text-green-300"&gt;{{ habModel() | json }}&lt;/pre&gt;
+    &lt;/div&gt;
+  `,
+})
+export class Habilidades {
+  habModel = signal({ habilidades: ['TypeScript', 'Angular'] });
+  habForm = form(this.habModel);
+
+  adicionar() {
+    this.habModel.update((m) =&gt; ({ ...m, habilidades: [...m.habilidades, ''] }));
+  }
+
+  remover(indice: number) {
+    this.habModel.update((m) =&gt; ({
+      ...m,
+      habilidades: m.habilidades.filter((_, i) =&gt; i !== indice),
+    }));
+  }
+}</code></pre>
+<div class="warning"><p>⚠️ <strong>Atenção:</strong> a estrutura do modelo deve usar apenas <strong>objetos e arrays JavaScript simples</strong>. Instâncias de classes, <code>Map</code> e <code>Set</code> não são suportados: o TypeScript aceita, mas o comportamento fica incorreto (classes perdem o protótipo e <code>Map</code>/<code>Set</code> geram árvores vazias).</p></div>
+</div>
+<div class="topic">
+<h2>3. Projetando o Modelo do Formulário</h2>
+<p>Como todo o formulário é derivado do modelo, vale a pena projetá-lo bem.</p>
+<h3>Boas práticas</h3>
+<ol><li><strong>Use tipos explícitos</strong>: defina interfaces para os modelos;</li><li><strong>Inicialize todos os campos</strong>: campos não inicializados não existem na field tree;</li><li><strong>Mantenha o modelo focado</strong>: um modelo por formulário (não misture login, preferências e carrinho);</li><li><strong>Pense na validação</strong>: agrupe campos validados em conjunto (ex.: <code>novaSenha</code> e <code>confirmarSenha</code>);</li><li><strong>Use tipos compatíveis com os controles</strong>: <code>&lt;select&gt;</code> trabalha com <code>string</code> (mesmo que as opções pareçam números); <code>&lt;input type="number"&gt;</code> trabalha com <code>number</code>;</li><li><strong>Evite <code>undefined</code> e propriedades opcionais (<code>campo?: string</code>)</strong>: <code>undefined</code> significa <em>ausência do campo</em>, e não <em>campo vazio</em>.</li></ol>
+<p>O exemplo a seguir aplica a prática 5: o tamanho do pacote vem de um <code>&lt;select&gt;</code>, então é <code>string</code>; a quantidade vem de um <code>&lt;input type="number"&gt;</code>, então é <code>number</code>:</p>
+<pre class="code-block"><code>// src/app/exemplos/pedido-bebida/pedido-bebida.ts
+import { Component, computed, signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
+
+interface PedidoBebidaFormModel {
+  tamanho: string;     // &lt;select&gt; com opções "6", "12", "24"
+  quantidade: number;  // &lt;input type="number"&gt;
+}
+
+@Component({
+  selector: 'app-pedido-bebida',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;label class="block text-sm font-medium text-gray-700"&gt;
+        Pacote
+        &lt;select [formField]="pedidoForm.tamanho" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"&gt;
+          &lt;option value="6"&gt;6 latas&lt;/option&gt;
+          &lt;option value="12"&gt;12 latas&lt;/option&gt;
+          &lt;option value="24"&gt;24 latas&lt;/option&gt;
+        &lt;/select&gt;
+      &lt;/label&gt;
+      &lt;label class="block text-sm font-medium text-gray-700"&gt;
+        Quantidade de pacotes
+        &lt;input type="number" [formField]="pedidoForm.quantidade" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;/label&gt;
+      &lt;p class="text-gray-700"&gt;Total: &lt;strong&gt;{{ totalLatas() }}&lt;/strong&gt; latas&lt;/p&gt;
+    &lt;/div&gt;
+  `,
+})
+export class PedidoBebida {
+  pedidoModel = signal&lt;PedidoBebidaFormModel&gt;({ tamanho: '6', quantidade: 1 });
+  pedidoForm = form(this.pedidoModel);
+
+  // A conversão de string para número acontece fora do modelo do formulário
+  totalLatas = computed(() =&gt; Number(this.pedidoModel().tamanho) * this.pedidoModel().quantidade);
+}</code></pre>
+<h3>Evite modelos com estrutura dinâmica</h3>
+<p>Um modelo tem estrutura dinâmica quando suas propriedades mudam conforme o valor (por exemplo, uma união de tipos). Em vez disso, mantenha uma <strong>estrutura estática</strong> com todos os campos possíveis e use regras de schema para <strong>esconder</strong> ou <strong>desabilitar</strong> o que não se aplica. Assim, se o usuário alternar entre "cartão" e "pix", os dados já digitados <strong>não se perdem</strong>:</p>
+<pre class="code-block"><code>// src/app/exemplos/pagamento/pagamento.ts
+import { Component, signal } from '@angular/core';
+import { JsonPipe } from '@angular/common';
+import { form, FormField, hidden, schema } from '@angular/forms/signals';
+
+interface PagamentoFormModel {
+  nome: string;
+  metodo: {
+    tipo: string; // 'cartao' ou 'pix'
+    cartao: { numero: string; cvv: string; validade: string };
+    pix: { chave: string };
+  };
+}
+
+const pagamentoSchema = schema&lt;PagamentoFormModel&gt;((p) =&gt; {
+  hidden(p.metodo.cartao, { when: ({ valueOf }) =&gt; valueOf(p.metodo.tipo) !== 'cartao' });
+  hidden(p.metodo.pix, { when: ({ valueOf }) =&gt; valueOf(p.metodo.tipo) !== 'pix' });
+});
+
+@Component({
+  selector: 'app-pagamento',
+  imports: [FormField, JsonPipe],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input [formField]="pagForm.nome" placeholder="Nome" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+
+      &lt;select [formField]="pagForm.metodo.tipo" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"&gt;
+        &lt;option value="cartao"&gt;Cartão de crédito&lt;/option&gt;
+        &lt;option value="pix"&gt;Pix&lt;/option&gt;
+      &lt;/select&gt;
+
+      @if (!pagForm.metodo.cartao().hidden()) {
+        &lt;fieldset class="space-y-3 rounded-lg border border-gray-200 p-4"&gt;
+          &lt;legend class="px-1 text-sm font-semibold text-gray-700"&gt;Cartão&lt;/legend&gt;
+          &lt;input [formField]="pagForm.metodo.cartao.numero" placeholder="Número"
+                 class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+          &lt;div class="grid grid-cols-2 gap-3"&gt;
+            &lt;input [formField]="pagForm.metodo.cartao.validade" placeholder="MM/AA"
+                   class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+            &lt;input [formField]="pagForm.metodo.cartao.cvv" placeholder="CVV"
+                   class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+          &lt;/div&gt;
+        &lt;/fieldset&gt;
+      }
+
+      @if (!pagForm.metodo.pix().hidden()) {
+        &lt;input [formField]="pagForm.metodo.pix.chave" placeholder="Chave Pix"
+               class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      }
+
+      &lt;pre class="overflow-x-auto rounded-lg bg-gray-900 p-3 text-xs text-green-300"&gt;{{ pagModel() | json }}&lt;/pre&gt;
+    &lt;/div&gt;
+  `,
+})
+export class Pagamento {
+  pagModel = signal&lt;PagamentoFormModel&gt;({
+    nome: '',
+    metodo: {
+      tipo: 'cartao',
+      cartao: { numero: '', cvv: '', validade: '' },
+      pix: { chave: '' },
+    },
+  });
+
+  pagForm = form(this.pagModel, pagamentoSchema);
+}</code></pre>
+<p>A exceção são os <strong>arrays</strong>, cujo tamanho varia naturalmente (a estrutura de cada item, porém, deve ser a mesma).</p>
+<h3>Modelo do formulário × modelo de domínio</h3>
+<p>O <strong>modelo de domínio</strong> representa os dados como a aplicação ou a API precisa (otimizado para regras de negócio e armazenamento). O <strong>modelo do formulário</strong> representa a <strong>entrada do usuário como ela aparece na tela</strong>. Eles podem ser diferentes: na tela, data e horário de um agendamento são escolhidos em campos separados, mas no domínio são um único <code>Date</code>.</p>
+<p>O arquivo abaixo define os dois modelos e as funções de conversão:</p>
+<pre class="code-block"><code>// src/app/exemplos/agendamento/agendamento.model.ts
+
+// Modelo de domínio: como a aplicação/API representa o dado
+export interface AgendamentoDomainModel {
+  nome: string;
+  momento: Date;
+}
+
+// Modelo do formulário: como o usuário preenche na tela
+export interface AgendamentoFormModel {
+  nome: string;
+  data: string;     // &lt;input type="date"&gt;  -&gt; "2026-10-05"
+  horario: string;  // &lt;select&gt;             -&gt; "14:00"
+}
+
+export const AGENDAMENTO_VAZIO: AgendamentoFormModel = { nome: '', data: '', horario: '' };
+
+const doisDigitos = (n: number) =&gt; String(n).padStart(2, '0');
+
+export function domainParaForm(ag: AgendamentoDomainModel): AgendamentoFormModel {
+  const m = ag.momento;
+  return {
+    nome: ag.nome,
+    data: `${m.getFullYear()}-${doisDigitos(m.getMonth() + 1)}-${doisDigitos(m.getDate())}`,
+    horario: `${doisDigitos(m.getHours())}:${doisDigitos(m.getMinutes())}`,
+  };
+}
+
+export function formParaDomain(f: AgendamentoFormModel): AgendamentoDomainModel {
+  return { nome: f.nome, momento: new Date(`${f.data}T${f.horario}`) };
+}</code></pre>
+<p>Um serviço (simulado) que "salva" o agendamento:</p>
+<pre class="code-block"><code>// src/app/exemplos/agendamento/agendamento.service.ts
+import { Injectable } from '@angular/core';
+import { AgendamentoDomainModel } from './agendamento.model';
+
+@Injectable({ providedIn: 'root' })
+export class AgendamentoService {
+  salvar(agendamento: AgendamentoDomainModel): Promise&lt;AgendamentoDomainModel&gt; {
+    console.log('Salvando', agendamento);
+    return new Promise((resolve) =&gt; setTimeout(() =&gt; resolve(agendamento), 1000));
+  }
+}</code></pre>
+<h3>Convertendo entre domínio e formulário</h3>
+<p>Para preencher o formulário com dados existentes (recebidos por <code>input()</code> ou de uma API), use <code>linkedSignal()</code>: ele <strong>deriva</strong> o modelo do formulário a partir do domínio e, ao mesmo tempo, continua <strong>editável</strong>. Para salvar, converta de volta dentro do <code>submit()</code>:</p>
+<pre class="code-block"><code>// src/app/exemplos/agendamento/editar-agendamento.ts
+import { Component, inject, input, linkedSignal, signal } from '@angular/core';
+import { form, FormField, required, submit } from '@angular/forms/signals';
+import { AgendamentoService } from './agendamento.service';
+import {
+  AGENDAMENTO_VAZIO, AgendamentoDomainModel, domainParaForm, formParaDomain,
+} from './agendamento.model';
+
+@Component({
+  selector: 'app-editar-agendamento',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;h2 class="text-xl font-semibold text-gray-800"&gt;Agendamento&lt;/h2&gt;
+      &lt;input [formField]="agForm.nome" placeholder="Nome" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;input type="date" [formField]="agForm.data" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;select [formField]="agForm.horario" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"&gt;
+        &lt;option value=""&gt;Horário...&lt;/option&gt;
+        &lt;option value="08:00"&gt;08:00&lt;/option&gt;
+        &lt;option value="10:00"&gt;10:00&lt;/option&gt;
+        &lt;option value="14:00"&gt;14:00&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;button type="button" (click)="salvar()" class="rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"&gt;Salvar&lt;/button&gt;
+      @if (salvo(); as ag) {
+        &lt;p class="text-sm text-green-700"&gt;Salvo: {{ ag.nome }} em {{ ag.momento.toLocaleString() }}&lt;/p&gt;
+      }
+    &lt;/div&gt;
+  `,
+})
+export class EditarAgendamento {
+  private service = inject(AgendamentoService);
+
+  // Dado de domínio recebido do componente pai (pode não existir)
+  readonly agendamento = input&lt;AgendamentoDomainModel&gt;();
+
+  // Modelo do formulário derivado do domínio (e ainda assim editável)
+  private readonly formModel = linkedSignal({
+    source: this.agendamento,
+    computation: (ag) =&gt; (ag ? domainParaForm(ag) : { ...AGENDAMENTO_VAZIO }),
+  });
+
+  protected readonly agForm = form(this.formModel, (p) =&gt; {
+    required(p.nome);
+    required(p.data);
+    required(p.horario);
+  });
+
+  protected salvo = signal&lt;AgendamentoDomainModel | null&gt;(null);
+
+  salvar() {
+    submit(this.agForm, async () =&gt; {
+      const salvo = await this.service.salvar(formParaDomain(this.agForm().value()));
+      this.salvo.set(salvo);
+    });
+  }
+}</code></pre>
+<p>Um componente pai que passa (ou não) um agendamento existente:</p>
+<pre class="code-block"><code>// src/app/exemplos/agendamento/agendamento-pagina.ts
+import { Component, signal } from '@angular/core';
+import { EditarAgendamento } from './editar-agendamento';
+import { AgendamentoDomainModel } from './agendamento.model';
+
+@Component({
+  selector: 'app-agendamento-pagina',
+  imports: [EditarAgendamento],
+  template: `
+    &lt;div class="mx-auto mb-4 max-w-md"&gt;
+      &lt;button type="button" (click)="carregar()" class="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"&gt;
+        Carregar agendamento existente
+      &lt;/button&gt;
+    &lt;/div&gt;
+    &lt;app-editar-agendamento [agendamento]="existente()" /&gt;
+  `,
+})
+export class AgendamentoPagina {
+  existente = signal&lt;AgendamentoDomainModel | undefined&gt;(undefined);
+
+  carregar() {
+    this.existente.set({ nome: 'Alice', momento: new Date(2026, 9, 5, 14, 0) });
+  }
+}</code></pre>
+</div>
+<div class="topic">
+<h2>4. Gerenciamento do Estado dos Campos</h2>
+<p>Ao chamar um campo como função (<code>meuForm.email()</code>), obtemos um objeto <code>FieldState</code> com vários signals:</p>
+<table class="comparison-table"><thead><tr><th>Categoria</th><th>Signal</th><th>Descrição</th></tr></thead><tbody><tr><td>Valor</td><td><code>value()</code></td><td>Valor atual (é um <code>WritableSignal</code>)</td></tr><tr><td>Validação</td><td><code>valid()</code></td><td>Passa em todas as regras e não há validação assíncrona pendente</td></tr><tr><td>Validação</td><td><code>invalid()</code></td><td>Possui erros de validação</td></tr><tr><td>Validação</td><td><code>errors()</code></td><td>Array de erros (<code>kind</code>, <code>message</code>, <code>fieldTree</code>)</td></tr><tr><td>Validação</td><td><code>pending()</code></td><td>Validação assíncrona em andamento</td></tr><tr><td>Interação</td><td><code>touched()</code></td><td>O usuário focou e saiu do campo (<em>blur</em>)</td></tr><tr><td>Interação</td><td><code>dirty()</code></td><td>O usuário alterou o valor (mesmo que tenha voltado ao original)</td></tr><tr><td>Disponibilidade</td><td><code>disabled()</code></td><td>Campo desabilitado</td></tr><tr><td>Disponibilidade</td><td><code>hidden()</code></td><td>Campo deve ser escondido (com <code>@if</code>)</td></tr><tr><td>Disponibilidade</td><td><code>readonly()</code></td><td>Campo somente leitura</td></tr></tbody></table>
+<h3>Estado de validação</h3>
+<pre class="code-block"><code>// src/app/exemplos/estado-validacao/estado-validacao.ts
+import { Component, signal } from '@angular/core';
+import { email, form, FormField, required } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-estado-validacao',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input type="email" [formField]="cadastroForm.email" placeholder="E-mail"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+
+      @if (cadastroForm.email().invalid()) {
+        &lt;ul class="list-inside list-disc rounded-lg bg-red-50 p-3 text-sm text-red-700"&gt;
+          @for (erro of cadastroForm.email().errors(); track erro) {
+            &lt;li&gt;{{ erro.message }} &lt;span class="text-red-400"&gt;({{ erro.kind }})&lt;/span&gt;&lt;/li&gt;
+          }
+        &lt;/ul&gt;
+      } @else {
+        &lt;p class="text-sm text-green-700"&gt;E-mail válido!&lt;/p&gt;
+      }
+    &lt;/div&gt;
+  `,
+})
+export class EstadoValidacao {
+  cadastroModel = signal({ email: '' });
+
+  cadastroForm = form(this.cadastroModel, (schemaPath) =&gt; {
+    required(schemaPath.email, { message: 'O e-mail é obrigatório' });
+    email(schemaPath.email, { message: 'Informe um e-mail válido' });
+  });
+}</code></pre>
+<div class="tip"><p>💡 <strong>Dica:</strong> durante uma validação assíncrona, <code>valid()</code> e <code>invalid()</code> podem ser <code>false</code> ao mesmo tempo (ainda não é válido, mas também não há erros). Por isso, para verificar se há erros, prefira <code>invalid()</code> em vez de <code>!valid()</code>.</p></div>
+<h3>Estado de interação: touched</h3>
+<p>O padrão mais comum é <strong>mostrar erros somente depois que o usuário interagiu</strong> com o campo (<code>touched() &amp;&amp; invalid()</code>):</p>
+<pre class="code-block"><code>// src/app/exemplos/erro-apos-toque/erro-apos-toque.ts
+import { Component, signal } from '@angular/core';
+import { email, form, FormField, required } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-erro-apos-toque',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;label class="block text-sm font-medium text-gray-700"&gt;
+        E-mail
+        &lt;input type="email" [formField]="signupForm.email" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;/label&gt;
+      @if (signupForm.email().touched() &amp;&amp; signupForm.email().invalid()) {
+        &lt;p class="mt-1 text-sm text-red-600"&gt;{{ signupForm.email().errors()[0].message }}&lt;/p&gt;
+      }
+    &lt;/div&gt;
+  `,
+})
+export class ErroAposToque {
+  signupModel = signal({ email: '' });
+
+  signupForm = form(this.signupModel, (p) =&gt; {
+    required(p.email, { message: 'O e-mail é obrigatório' });
+    email(p.email, { message: 'Informe um e-mail válido' });
+  });
+}</code></pre>
+<h3>Estado de interação: dirty</h3>
+<p>O <code>dirty()</code> é útil para avisos de "alterações não salvas":</p>
+<pre class="code-block"><code>// src/app/exemplos/alteracoes/alteracoes.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-alteracoes',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input [formField]="perfilForm.nome" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;textarea [formField]="perfilForm.bio" rows="3" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"&gt;&lt;/textarea&gt;
+
+      @if (perfilForm().dirty()) {
+        &lt;p class="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800"&gt;
+          ⚠️ Você tem alterações não salvas
+        &lt;/p&gt;
+      }
+    &lt;/div&gt;
+  `,
+})
+export class Alteracoes {
+  perfilModel = signal({ nome: 'Alice', bio: 'Desenvolvedora' });
+  perfilForm = form(this.perfilModel);
+}</code></pre>
+<table class="comparison-table"><thead><tr><th>Signal</th><th>Torna-se <code>true</code> quando</th></tr></thead><tbody><tr><td><code>touched()</code></td><td>O usuário focou e saiu do campo, ou o campo foi marcado com <code>markAsTouched()</code></td></tr><tr><td><code>dirty()</code></td><td>O usuário modificou o valor (mesmo sem sair do campo)</td></tr></tbody></table>
+<h3>Revelando os erros de uma seção com <code>markAsTouched()</code></h3>
+<p>Em formulários com várias etapas, o botão "Continuar" pode marcar uma seção inteira como <em>touched</em>; todos os campos descendentes também são marcados e seus erros aparecem:</p>
+<pre class="code-block"><code>// src/app/exemplos/checkout/checkout.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField, required } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-checkout',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      @if (passo() === 1) {
+        &lt;h2 class="text-xl font-semibold text-gray-800"&gt;1. Entrega&lt;/h2&gt;
+        &lt;div&gt;
+          &lt;input [formField]="checkoutForm.entrega.nome" placeholder="Nome" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+          @if (checkoutForm.entrega.nome().touched() &amp;&amp; checkoutForm.entrega.nome().invalid()) {
+            &lt;p class="mt-1 text-sm text-red-600"&gt;{{ checkoutForm.entrega.nome().errors()[0].message }}&lt;/p&gt;
+          }
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;input [formField]="checkoutForm.entrega.endereco" placeholder="Endereço"
+                 class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+          @if (checkoutForm.entrega.endereco().touched() &amp;&amp;
+               checkoutForm.entrega.endereco().invalid()) {
+            &lt;p class="mt-1 text-sm text-red-600"&gt;{{ checkoutForm.entrega.endereco().errors()[0].message }}&lt;/p&gt;
+          }
+        &lt;/div&gt;
+        &lt;button type="button" (click)="continuar()" class="rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"&gt;Continuar&lt;/button&gt;
+      } @else {
+        &lt;h2 class="text-xl font-semibold text-gray-800"&gt;2. Pagamento&lt;/h2&gt;
+        &lt;p class="text-gray-600"&gt;Entregar para {{ checkoutModel().entrega.nome }}.&lt;/p&gt;
+        &lt;button type="button" (click)="passo.set(1)" class="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"&gt;Voltar&lt;/button&gt;
+      }
+    &lt;/div&gt;
+  `,
+})
+export class Checkout {
+  passo = signal(1);
+
+  checkoutModel = signal({
+    entrega: { nome: '', endereco: '' },
+  });
+
+  checkoutForm = form(this.checkoutModel, (p) =&gt; {
+    required(p.entrega.nome, { message: 'Informe o nome' });
+    required(p.entrega.endereco, { message: 'Informe o endereço' });
+  });
+
+  continuar() {
+    this.checkoutForm.entrega().markAsTouched();
+    if (this.checkoutForm.entrega().invalid()) {
+      return;
+    }
+    this.passo.set(2);
+  }
+}</code></pre>
+<h3>Estado de disponibilidade: disabled, hidden e readonly</h3>
+<p>Essas regras são definidas na função de schema. A opção <code>when</code> recebe um contexto com <code>valueOf()</code>, que lê o valor de <strong>outro</strong> campo. O <code>[formField]</code> aplica automaticamente os atributos <code>disabled</code> e <code>readonly</code> no elemento; já o <code>hidden</code> precisa de um <code>@if</code> no template:</p>
+<pre class="code-block"><code>// src/app/exemplos/disponibilidade/disponibilidade.ts
+import { Component, signal } from '@angular/core';
+import { disabled, form, FormField, hidden, readonly } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-disponibilidade',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;label class="block text-sm font-medium text-gray-700"&gt;
+        Código do pedido (somente leitura)
+        &lt;input [formField]="pedidoForm.codigo"
+               class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 read-only:bg-gray-100 read-only:text-gray-500" /&gt;
+      &lt;/label&gt;
+
+      &lt;label class="block text-sm font-medium text-gray-700"&gt;
+        Total do pedido (R$)
+        &lt;input type="number" [formField]="pedidoForm.total" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;/label&gt;
+
+      &lt;label class="block text-sm font-medium text-gray-700"&gt;
+        Cupom
+        &lt;input [formField]="pedidoForm.cupom"
+               class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:cursor-not-allowed disabled:bg-gray-100" /&gt;
+      &lt;/label&gt;
+      @if (pedidoForm.cupom().disabled()) {
+        &lt;p class="text-sm text-sky-700"&gt;ℹ️ Cupom disponível apenas para pedidos a partir de R$ 50&lt;/p&gt;
+      }
+
+      &lt;label class="flex items-center gap-2 text-sm text-gray-700"&gt;
+        &lt;input type="checkbox" [formField]="pedidoForm.entregar" class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" /&gt;
+        Entregar em casa
+      &lt;/label&gt;
+
+      @if (!pedidoForm.endereco().hidden()) {
+        &lt;input [formField]="pedidoForm.endereco" placeholder="Endereço de entrega"
+               class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      }
+    &lt;/div&gt;
+  `,
+})
+export class Disponibilidade {
+  pedidoModel = signal({
+    codigo: 'PED-2026-001',
+    total: 25,
+    cupom: '',
+    entregar: false,
+    endereco: '',
+  });
+
+  pedidoForm = form(this.pedidoModel, (p) =&gt; {
+    readonly(p.codigo);
+    disabled(p.cupom, { when: ({ valueOf }) =&gt; valueOf(p.total) &lt; 50 });
+    hidden(p.endereco, { when: ({ valueOf }) =&gt; !valueOf(p.entregar) });
+  });
+}</code></pre>
+<table class="comparison-table"><thead><tr><th>Estado</th><th>Quando usar</th><th>Usuário vê?</th><th>Usuário edita?</th><th>Participa da validação?</th></tr></thead><tbody><tr><td><code>disabled()</code></td><td>Campo temporariamente indisponível</td><td>Sim</td><td>Não</td><td>Não</td></tr><tr><td><code>hidden()</code></td><td>Campo irrelevante no contexto atual</td><td>Não (com <code>@if</code>)</td><td>Não</td><td>Não</td></tr><tr><td><code>readonly()</code></td><td>Valor deve ser exibido, mas não editado</td><td>Sim</td><td>Não</td><td>Não</td></tr></tbody></table>
+<div class="warning"><p>⚠️ <strong>Atenção:</strong> campos escondidos, desabilitados ou somente leitura <strong>não afetam</strong> o estado do formulário pai. Um campo obrigatório escondido não impede o envio.</p></div>
+<h3>Estado do formulário e propagação</h3>
+<p>O formulário raiz também é um campo: <code>meuForm()</code> retorna um <code>FieldState</code> que <strong>agrega</strong> o estado dos filhos. Se um campo filho fica inválido, o grupo pai e o formulário inteiro também ficam inválidos. Digite nos campos e observe:</p>
+<pre class="code-block"><code>// src/app/exemplos/propagacao/propagacao.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField, required } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-propagacao',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input [formField]="userForm.perfil.nome" placeholder="Nome (obrigatório)"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;input [formField]="userForm.endereco.cidade" placeholder="Cidade (obrigatória)"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+
+      &lt;table class="w-full text-left text-sm"&gt;
+        &lt;thead class="text-gray-500"&gt;
+          &lt;tr&gt;&lt;th&gt;Nível&lt;/th&gt;&lt;th&gt;valid&lt;/th&gt;&lt;th&gt;touched&lt;/th&gt;&lt;th&gt;dirty&lt;/th&gt;&lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody class="font-mono"&gt;
+          &lt;tr&gt;
+            &lt;td&gt;perfil.nome&lt;/td&gt;
+            &lt;td&gt;{{ userForm.perfil.nome().valid() }}&lt;/td&gt;
+            &lt;td&gt;{{ userForm.perfil.nome().touched() }}&lt;/td&gt;
+            &lt;td&gt;{{ userForm.perfil.nome().dirty() }}&lt;/td&gt;
+          &lt;/tr&gt;
+          &lt;tr&gt;
+            &lt;td&gt;perfil&lt;/td&gt;
+            &lt;td&gt;{{ userForm.perfil().valid() }}&lt;/td&gt;
+            &lt;td&gt;{{ userForm.perfil().touched() }}&lt;/td&gt;
+            &lt;td&gt;{{ userForm.perfil().dirty() }}&lt;/td&gt;
+          &lt;/tr&gt;
+          &lt;tr class="font-bold"&gt;
+            &lt;td&gt;formulário&lt;/td&gt;
+            &lt;td&gt;{{ userForm().valid() }}&lt;/td&gt;
+            &lt;td&gt;{{ userForm().touched() }}&lt;/td&gt;
+            &lt;td&gt;{{ userForm().dirty() }}&lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+
+      &lt;button type="button" [disabled]="userForm().invalid()" class="rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"&gt;Salvar&lt;/button&gt;
+    &lt;/div&gt;
+  `,
+})
+export class Propagacao {
+  userModel = signal({
+    perfil: { nome: '' },
+    endereco: { cidade: '' },
+  });
+
+  userForm = form(this.userModel, (p) =&gt; {
+    required(p.perfil.nome);
+    required(p.endereco.cidade);
+  });
+}</code></pre>
+<table class="comparison-table"><thead><tr><th>Signal</th><th>No nível do formulário</th></tr></thead><tbody><tr><td><code>valid()</code></td><td>Todos os campos interativos válidos e nenhuma validação pendente</td></tr><tr><td><code>invalid()</code></td><td>Pelo menos um campo interativo com erro</td></tr><tr><td><code>pending()</code></td><td>Pelo menos um campo com validação assíncrona pendente</td></tr><tr><td><code>touched()</code></td><td>Pelo menos um campo tocado</td></tr><tr><td><code>dirty()</code></td><td>Pelo menos um campo modificado</td></tr></tbody></table>
+<p>Use o <strong>estado do formulário</strong> para habilitar o botão de envio e avisos gerais; use o <strong>estado de cada campo</strong> para mensagens de erro e estilização.</p>
+<h3>Estilizando conforme o estado</h3>
+<p>Os Signal Forms <strong>não usam</strong> a validação nativa do navegador. Por isso, não use <code>:valid</code>/<code>:invalid</code> no CSS, nem as variantes <code>valid:</code>/<code>invalid:</code>/<code>user-invalid:</code> do Tailwind (elas também dependem da validação nativa). Em vez disso, ligue as classes do Tailwind aos signals com <code>[class.nome-da-classe]</code>:</p>
+<pre class="code-block"><code>// src/app/exemplos/estilo-estado/estilo-estado.ts
+import { Component, signal } from '@angular/core';
+import { email, form, FormField, required } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-estilo-estado',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input
+        type="email"
+        placeholder="E-mail"
+        [formField]="f.email"
+        class="w-full rounded-lg border-2 border-gray-300 px-3 py-2 focus:outline-none"
+        [class.border-red-500]="f.email().touched() &amp;&amp; f.email().invalid()"
+        [class.bg-red-50]="f.email().touched() &amp;&amp; f.email().invalid()"
+        [class.border-green-500]="f.email().touched() &amp;&amp; f.email().valid()"
+      /&gt;
+    &lt;/div&gt;
+  `,
+})
+export class EstiloEstado {
+  model = signal({ email: '' });
+
+  f = form(this.model, (p) =&gt; {
+    required(p.email);
+    email(p.email);
+  });
+}</code></pre>
+<h3>Envio (submit) e reset</h3>
+<p>A diretiva <code>FormRoot</code> (<code>[formRoot]</code>) cuida do envio: evita o comportamento padrão do navegador, adiciona <code>novalidate</code> ao <code>&lt;form&gt;</code> e chama <code>submit()</code>. O <code>submit()</code> <strong>marca todos os campos como touched</strong> (revelando os erros) e executa a <code>action</code> <strong>somente se o formulário for válido</strong>. Enquanto a <code>action</code> executa, <code>submitting()</code> é <code>true</code>:</p>
+<pre class="code-block"><code>// src/app/exemplos/contato/contato.ts
+import { Component, signal } from '@angular/core';
+import { email, form, FormField, FormRoot, required } from '@angular/forms/signals';
+
+interface ContatoData {
+  nome: string;
+  email: string;
+  mensagem: string;
+}
+
+const CONTATO_INICIAL: ContatoData = { nome: '', email: '', mensagem: '' };
+
+@Component({
+  selector: 'app-contato',
+  imports: [FormRoot, FormField],
+  template: `
+    &lt;form [formRoot]="contatoForm" class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;h2 class="text-xl font-semibold text-gray-800"&gt;Fale conosco&lt;/h2&gt;
+
+      &lt;div&gt;
+        &lt;input [formField]="contatoForm.nome" placeholder="Nome" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+        @if (contatoForm.nome().touched() &amp;&amp; contatoForm.nome().invalid()) {
+          &lt;p class="mt-1 text-sm text-red-600"&gt;{{ contatoForm.nome().errors()[0].message }}&lt;/p&gt;
+        }
+      &lt;/div&gt;
+
+      &lt;div&gt;
+        &lt;input type="email" [formField]="contatoForm.email" placeholder="E-mail"
+               class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+        @if (contatoForm.email().touched() &amp;&amp; contatoForm.email().invalid()) {
+          &lt;p class="mt-1 text-sm text-red-600"&gt;{{ contatoForm.email().errors()[0].message }}&lt;/p&gt;
+        }
+      &lt;/div&gt;
+
+      &lt;div&gt;
+        &lt;textarea [formField]="contatoForm.mensagem" rows="4" placeholder="Mensagem"
+                  class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"&gt;&lt;/textarea&gt;
+        @if (contatoForm.mensagem().touched() &amp;&amp; contatoForm.mensagem().invalid()) {
+          &lt;p class="mt-1 text-sm text-red-600"&gt;{{ contatoForm.mensagem().errors()[0].message }}&lt;/p&gt;
+        }
+      &lt;/div&gt;
+
+      &lt;button type="submit" [disabled]="contatoForm().submitting()" class="w-full rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"&gt;
+        {{ contatoForm().submitting() ? 'Enviando...' : 'Enviar' }}
+      &lt;/button&gt;
+
+      @if (enviado()) {
+        &lt;p class="text-sm text-green-700"&gt;✅ Mensagem enviada!&lt;/p&gt;
+      }
+    &lt;/form&gt;
+  `,
+})
+export class Contato {
+  contatoModel = signal&lt;ContatoData&gt;({ ...CONTATO_INICIAL });
+  enviado = signal(false);
+
+  contatoForm = form(
+    this.contatoModel,
+    (p) =&gt; {
+      required(p.nome, { message: 'Informe o seu nome' });
+      required(p.email, { message: 'Informe o seu e-mail' });
+      email(p.email, { message: 'Informe um e-mail válido' });
+      required(p.mensagem, { message: 'Escreva a mensagem' });
+    },
+    {
+      submission: {
+        action: async (f) =&gt; {
+          await this.enviar(this.contatoModel());
+          this.enviado.set(true);
+          // Limpa touched/dirty e volta aos valores iniciais
+          f().reset({ ...CONTATO_INICIAL });
+        },
+      },
+    },
+  );
+
+  private enviar(dados: ContatoData): Promise&lt;ContatoData&gt; {
+    console.log('Enviando', dados);
+    return new Promise((resolve) =&gt; setTimeout(() =&gt; resolve(dados), 1000));
+  }
+}</code></pre>
+<h3>Focando o primeiro campo inválido</h3>
+<p>Por acessibilidade, ao tentar enviar um formulário inválido, é uma boa prática mover o foco para o primeiro campo com erro, usando <code>errorSummary()</code> e <code>focusBoundControl()</code>. Este exemplo também mostra o envio manual com a função <code>submit()</code>, sem a diretiva <code>FormRoot</code>:</p>
+<pre class="code-block"><code>// src/app/exemplos/foco-erro/foco-erro.ts
+import { Component, signal } from '@angular/core';
+import { email, form, FormField, required, submit } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-foco-erro',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      @for (campo of [cadastroForm.usuario, cadastroForm.email, cadastroForm.senha]; track $index) {
+        &lt;div&gt;
+          &lt;input [formField]="campo" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+          @if (campo().touched() &amp;&amp; campo().invalid()) {
+            &lt;p class="mt-1 text-sm text-red-600"&gt;{{ campo().errors()[0].message }}&lt;/p&gt;
+          }
+        &lt;/div&gt;
+      }
+      &lt;button type="button" (click)="enviar()" class="rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"&gt;Cadastrar&lt;/button&gt;
+      &lt;p class="text-sm text-gray-600"&gt;{{ status() }}&lt;/p&gt;
+    &lt;/div&gt;
+  `,
+})
+export class FocoErro {
+  status = signal('');
+
+  cadastroModel = signal({ usuario: '', email: '', senha: '' });
+
+  cadastroForm = form(this.cadastroModel, (p) =&gt; {
+    required(p.usuario, { message: 'Informe o usuário' });
+    required(p.email, { message: 'Informe o e-mail' });
+    email(p.email, { message: 'E-mail inválido' });
+    required(p.senha, { message: 'Informe a senha' });
+  });
+
+  enviar() {
+    const primeiroErro = this.cadastroForm().errorSummary()[0];
+    if (primeiroErro?.fieldTree) {
+      this.cadastroForm().markAsTouched();
+      primeiroErro.fieldTree().focusBoundControl();
+      return;
+    }
+    submit(this.cadastroForm, async () =&gt; {
+      this.status.set('Cadastro enviado!');
+    });
+  }
+}</code></pre>
+</div>
+<div class="topic">
+<h2>5. Validação</h2>
+<p>A validação é definida na <strong>função de schema</strong>, passada como segundo argumento de <code>form()</code>. Ela recebe um <code>SchemaPathTree</code> (os "caminhos" para cada campo) e:</p>
+<ol><li><strong>Executa uma única vez</strong>, na criação do formulário, para registrar as regras;</li><li>As regras rodam <strong>automaticamente</strong> sempre que um valor muda;</li><li>Os erros ficam disponíveis nos signals <code>valid()</code>, <code>invalid()</code>, <code>errors()</code> e <code>pending()</code>.</li></ol>
+<p>Ordem de execução: primeiro as regras <strong>síncronas</strong>; as <strong>assíncronas</strong> só rodam se todas as síncronas passarem. Todas as regras rodam (não para no primeiro erro), então um campo pode ter vários erros ao mesmo tempo.</p>
+<h3>Validadores prontos</h3>
+<pre class="code-block"><code>// src/app/exemplos/inscricao/inscricao.ts
+import { Component, signal } from '@angular/core';
+import {
+  email, form, FormField, max, maxLength, min, minLength, pattern, required,
+} from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-inscricao',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      @for (campo of campos; track campo.rotulo) {
+        &lt;label class="block text-sm font-medium text-gray-700"&gt;
+          {{ campo.rotulo }}
+          &lt;input [type]="campo.tipo" [formField]="campo.field" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+        &lt;/label&gt;
+        @if (campo.field().touched()) {
+          @for (erro of campo.field().errors(); track erro) {
+            &lt;p class="mt-1 text-sm text-red-600"&gt;{{ erro.message }}&lt;/p&gt;
+          }
+        }
+      }
+      &lt;label class="block text-sm font-medium text-gray-700"&gt;
+        Idade
+        &lt;input type="number" [formField]="inscricaoForm.idade" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;/label&gt;
+      @if (inscricaoForm.idade().touched()) {
+        @for (erro of inscricaoForm.idade().errors(); track erro) {
+          &lt;p class="mt-1 text-sm text-red-600"&gt;{{ erro.message }}&lt;/p&gt;
+        }
+      }
+    &lt;/div&gt;
+  `,
+})
+export class Inscricao {
+  inscricaoModel = signal({ nome: '', email: '', cep: '', bio: '', idade: 0 });
+
+  inscricaoForm = form(this.inscricaoModel, (p) =&gt; {
+    required(p.nome, { message: 'O nome é obrigatório' });
+    minLength(p.nome, 3, { message: 'O nome deve ter pelo menos 3 caracteres' });
+
+    required(p.email, { message: 'O e-mail é obrigatório' });
+    email(p.email, { message: 'Informe um e-mail válido' });
+
+    pattern(p.cep, /^\d{5}-\d{3}$/, { message: 'O CEP deve estar no formato 00000-000' });
+
+    maxLength(p.bio, 50, { message: 'A bio deve ter no máximo 50 caracteres' });
+
+    min(p.idade, 18, { message: 'Você deve ter pelo menos 18 anos' });
+    max(p.idade, 120, { message: 'Informe uma idade válida' });
+  });
+
+  // Campos de texto exibidos com o mesmo trecho de template
+  campos = [
+    { rotulo: 'Nome', tipo: 'text', field: this.inscricaoForm.nome },
+    { rotulo: 'E-mail', tipo: 'email', field: this.inscricaoForm.email },
+    { rotulo: 'CEP', tipo: 'text', field: this.inscricaoForm.cep },
+    { rotulo: 'Bio', tipo: 'text', field: this.inscricaoForm.bio },
+  ];
+}</code></pre>
+<table class="comparison-table"><thead><tr><th>Validador</th><th>Verifica</th><th>Observação</th></tr></thead><tbody><tr><td><code>required()</code></td><td>Campo preenchido</td><td>São vazios: <code>null</code>, <code>undefined</code>, <code>''</code>, <code>false</code> e <code>NaN</code> (o <code>0</code> e <code>[]</code> não são vazios)</td></tr><tr><td><code>email()</code></td><td>Formato de e-mail</td><td>Aceita <code>user@ifpb.edu.br</code>, rejeita <code>user@</code></td></tr><tr><td><code>min()</code> / <code>max()</code></td><td>Limites numéricos</td><td>Aceitam valor fixo ou função: <code>min(p.qtd, () =&gt; this.minimo())</code></td></tr><tr><td><code>minLength()</code> / <code>maxLength()</code></td><td>Tamanho</td><td>Caracteres (strings) ou elementos (arrays)</td></tr><tr><td><code>pattern()</code></td><td>Expressão regular</td><td>Telefone, CEP, matrícula...</td></tr></tbody></table>
+<div class="tip"><p>💡 <strong>Dica:</strong> sempre informe a opção <code>message</code>. Mensagens devem dizer ao usuário <strong>como corrigir</strong> o problema ("A senha deve ter pelo menos 8 caracteres" em vez de "Entrada inválida"). Todo erro também tem um <code>kind</code> (<code>'required'</code>, <code>'email'</code>, <code>'minLength'</code>...), útil para mapear mensagens próprias.</p></div>
+<h3>Validação condicional com <code>when</code></h3>
+<p>Todos os validadores aceitam a opção <code>when</code>; a regra só é aplicada quando a função retorna <code>true</code>:</p>
+<pre class="code-block"><code>// src/app/exemplos/cupom/cupom.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField, required } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-cupom',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;label class="flex items-center gap-2 text-sm text-gray-700"&gt;
+        &lt;input type="checkbox" [formField]="cupomForm.temCupom" class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" /&gt;
+        Tenho um cupom de desconto
+      &lt;/label&gt;
+      &lt;input [formField]="cupomForm.codigoCupom" placeholder="Código do cupom"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      @if (cupomForm.codigoCupom().invalid()) {
+        &lt;p class="mt-1 text-sm text-red-600"&gt;{{ cupomForm.codigoCupom().errors()[0].message }}&lt;/p&gt;
+      }
+      &lt;p class="text-sm text-gray-500"&gt;Formulário válido: {{ cupomForm().valid() }}&lt;/p&gt;
+    &lt;/div&gt;
+  `,
+})
+export class Cupom {
+  cupomModel = signal({ temCupom: false, codigoCupom: '' });
+
+  cupomForm = form(this.cupomModel, (p) =&gt; {
+    required(p.codigoCupom, {
+      message: 'Informe o código do cupom',
+      when: ({ valueOf }) =&gt; valueOf(p.temCupom),
+    });
+  });
+}</code></pre>
+<p>Para ativar um <strong>grupo</strong> de regras de uma vez, use <code>applyWhen()</code>:</p>
+<pre class="code-block"><code>// src/app/exemplos/endereco-pais/endereco-pais.ts
+import { Component, signal } from '@angular/core';
+import { applyWhen, form, FormField, pattern, required } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-endereco-pais',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;select [formField]="enderecoForm.pais" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"&gt;
+        &lt;option value="BR"&gt;Brasil&lt;/option&gt;
+        &lt;option value="PT"&gt;Portugal&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;input [formField]="enderecoForm.cep" placeholder="CEP / código postal"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      @for (erro of enderecoForm.cep().errors(); track erro) {
+        &lt;p class="mt-1 text-sm text-red-600"&gt;{{ erro.message }}&lt;/p&gt;
+      }
+    &lt;/div&gt;
+  `,
+})
+export class EnderecoPais {
+  enderecoModel = signal({ pais: 'BR', cep: '' });
+
+  enderecoForm = form(this.enderecoModel, (p) =&gt; {
+    required(p.pais);
+
+    applyWhen(
+      p,
+      ({ valueOf }) =&gt; valueOf(p.pais) === 'BR',
+      (p) =&gt; {
+        // Só valem quando o país é Brasil
+        required(p.cep, { message: 'O CEP é obrigatório no Brasil' });
+        pattern(p.cep, /^\d{5}-\d{3}$/, { message: 'Use o formato 00000-000' });
+      },
+    );
+  });
+}</code></pre>
+<h3>Validadores personalizados com <code>validate()</code></h3>
+<p><code>validate()</code> recebe uma função que retorna um <strong>objeto de erro</strong> (<code>kind</code> e <code>message</code>) quando o valor é inválido, ou <code>null</code> quando é válido:</p>
+<pre class="code-block"><code>// src/app/exemplos/site/site.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField, validate } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-site',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input [formField]="siteForm.site" placeholder="https://..." class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      @if (siteForm.site().invalid()) {
+        &lt;p class="mt-1 text-sm text-red-600"&gt;{{ siteForm.site().errors()[0].message }}&lt;/p&gt;
+      }
+    &lt;/div&gt;
+  `,
+})
+export class Site {
+  siteModel = signal({ site: '' });
+
+  siteForm = form(this.siteModel, (p) =&gt; {
+    validate(p.site, ({ value }) =&gt; {
+      if (!value().startsWith('https://')) {
+        return { kind: 'https', message: 'A URL deve começar com https://' };
+      }
+      return null;
+    });
+  });
+}</code></pre>
+<p>A função recebe um <code>FieldContext</code> com, entre outros:</p>
+<table class="comparison-table"><thead><tr><th>Propriedade</th><th>Descrição</th></tr></thead><tbody><tr><td><code>value</code></td><td>Signal com o valor do campo validado</td></tr><tr><td><code>valueOf(path)</code></td><td>Lê o valor de outro campo</td></tr><tr><td><code>stateOf(path)</code></td><td>Lê o estado de outro campo</td></tr><tr><td><code>state</code> / <code>fieldTree</code></td><td>Estado e field tree do próprio campo</td></tr></tbody></table>
+<h3>Validadores reutilizáveis</h3>
+<p>Basta encapsular o <code>validate()</code> em uma função que recebe um <code>SchemaPath</code>:</p>
+<pre class="code-block"><code>// src/app/exemplos/validadores/cpf.validator.ts
+import { SchemaPath, validate } from '@angular/forms/signals';
+
+export function cpf(path: SchemaPath&lt;string&gt;, options?: { message?: string }) {
+  validate(path, ({ value }) =&gt; {
+    const numeros = value().replace(/\D/g, '');
+    if (numeros.length !== 11 || /^(\d)\1+$/.test(numeros)) {
+      return { kind: 'cpf', message: options?.message ?? 'CPF inválido' };
+    }
+    return null;
+  });
+}</code></pre>
+<p>E usá-lo como um validador pronto:</p>
+<pre class="code-block"><code>// src/app/exemplos/aluno-cpf/aluno-cpf.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField, required } from '@angular/forms/signals';
+import { cpf } from '../validadores/cpf.validator';
+
+@Component({
+  selector: 'app-aluno-cpf',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input [formField]="alunoForm.cpf" placeholder="000.000.000-00" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      @if (alunoForm.cpf().touched() &amp;&amp; alunoForm.cpf().invalid()) {
+        &lt;p class="mt-1 text-sm text-red-600"&gt;{{ alunoForm.cpf().errors()[0].message }}&lt;/p&gt;
+      }
+    &lt;/div&gt;
+  `,
+})
+export class AlunoCpf {
+  alunoModel = signal({ cpf: '' });
+
+  alunoForm = form(this.alunoModel, (p) =&gt; {
+    required(p.cpf, { message: 'O CPF é obrigatório' });
+    cpf(p.cpf, { message: 'Informe um CPF válido' });
+  });
+}</code></pre>
+<p>Schemas inteiros também podem ser reutilizados: <code>schema()</code> cria o schema e <code>apply()</code> o aplica a um caminho:</p>
+<pre class="code-block"><code>// src/app/exemplos/enderecos/enderecos.ts
+import { Component, signal } from '@angular/core';
+import { apply, form, FormField, required, schema } from '@angular/forms/signals';
+
+interface Endereco {
+  rua: string;
+  cidade: string;
+}
+
+const enderecoSchema = schema&lt;Endereco&gt;((e) =&gt; {
+  required(e.rua, { message: 'Informe a rua' });
+  required(e.cidade, { message: 'Informe a cidade' });
+});
+
+@Component({
+  selector: 'app-enderecos',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;h3 class="font-semibold text-gray-700"&gt;Entrega&lt;/h3&gt;
+      &lt;input [formField]="pedidoForm.entrega.rua" placeholder="Rua" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;input [formField]="pedidoForm.entrega.cidade" placeholder="Cidade" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+
+      &lt;h3 class="font-semibold text-gray-700"&gt;Cobrança&lt;/h3&gt;
+      &lt;input [formField]="pedidoForm.cobranca.rua" placeholder="Rua" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;input [formField]="pedidoForm.cobranca.cidade" placeholder="Cidade" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+
+      &lt;p class="text-sm text-gray-500"&gt;
+        Entrega válida: {{ pedidoForm.entrega().valid() }} ·
+        Cobrança válida: {{ pedidoForm.cobranca().valid() }}
+      &lt;/p&gt;
+    &lt;/div&gt;
+  `,
+})
+export class Enderecos {
+  pedidoModel = signal({
+    entrega: { rua: '', cidade: '' },
+    cobranca: { rua: '', cidade: '' },
+  });
+
+  pedidoForm = form(this.pedidoModel, (p) =&gt; {
+    apply(p.entrega, enderecoSchema);
+    apply(p.cobranca, enderecoSchema);
+  });
+}</code></pre>
+<h3>Validação entre campos (cross-field)</h3>
+<p>Com <code>valueOf()</code>, uma regra pode comparar campos. Ela é reavaliada automaticamente quando <strong>qualquer um</strong> dos dois muda:</p>
+<pre class="code-block"><code>// src/app/exemplos/troca-senha/troca-senha.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField, minLength, required, validate } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-troca-senha',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input type="password" [formField]="senhaForm.senha" placeholder="Nova senha"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      @if (senhaForm.senha().touched()) {
+        @for (erro of senhaForm.senha().errors(); track erro) {
+          &lt;p class="mt-1 text-sm text-red-600"&gt;{{ erro.message }}&lt;/p&gt;
+        }
+      }
+
+      &lt;input type="password" [formField]="senhaForm.confirmarSenha" placeholder="Confirmar senha"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      @if (senhaForm.confirmarSenha().touched()) {
+        @for (erro of senhaForm.confirmarSenha().errors(); track erro) {
+          &lt;p class="mt-1 text-sm text-red-600"&gt;{{ erro.message }}&lt;/p&gt;
+        }
+      }
+
+      &lt;button type="button" [disabled]="senhaForm().invalid()" class="rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"&gt;
+        Alterar senha
+      &lt;/button&gt;
+    &lt;/div&gt;
+  `,
+})
+export class TrocaSenha {
+  senhaModel = signal({ senha: '', confirmarSenha: '' });
+
+  senhaForm = form(this.senhaModel, (p) =&gt; {
+    required(p.senha, { message: 'A senha é obrigatória' });
+    minLength(p.senha, 8, { message: 'A senha deve ter pelo menos 8 caracteres' });
+
+    required(p.confirmarSenha, { message: 'Confirme a sua senha' });
+    validate(p.confirmarSenha, ({ value, valueOf }) =&gt; {
+      if (value() !== valueOf(p.senha)) {
+        return { kind: 'senhasDiferentes', message: 'As senhas não conferem' };
+      }
+      return null;
+    });
+  });
+}</code></pre>
+<p>Para regras que envolvem uma subárvore inteira e precisam apontar o erro para um campo específico, use <code>validateTree()</code>, informando o campo em <code>fieldTree</code>:</p>
+<pre class="code-block"><code>// src/app/exemplos/periodo/periodo.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField, required, validateTree } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-periodo',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;label class="block text-sm font-medium text-gray-700"&gt;
+        Início
+        &lt;input type="date" [formField]="periodoForm.dataInicio" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;/label&gt;
+      &lt;label class="block text-sm font-medium text-gray-700"&gt;
+        Fim
+        &lt;input type="date" [formField]="periodoForm.dataFim" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      &lt;/label&gt;
+      @for (erro of periodoForm.dataFim().errors(); track erro) {
+        &lt;p class="mt-1 text-sm text-red-600"&gt;{{ erro.message }}&lt;/p&gt;
+      }
+    &lt;/div&gt;
+  `,
+})
+export class Periodo {
+  periodoModel = signal({ dataInicio: '', dataFim: '' });
+
+  periodoForm = form(this.periodoModel, (p) =&gt; {
+    required(p.dataInicio);
+    required(p.dataFim);
+
+    validateTree(p, (ctx) =&gt; {
+      const inicio = ctx.valueOf(p.dataInicio);
+      const fim = ctx.valueOf(p.dataFim);
+      // Datas no formato "AAAA-MM-DD" podem ser comparadas como texto
+      if (inicio &amp;&amp; fim &amp;&amp; fim &lt; inicio) {
+        return {
+          kind: 'periodoInvalido',
+          message: 'A data final deve ser posterior à inicial',
+          fieldTree: ctx.fieldTree.dataFim,
+        };
+      }
+      return null;
+    });
+  });
+}</code></pre>
+<h3>Validando itens de arrays com <code>applyEach()</code></h3>
+<pre class="code-block"><code>// src/app/exemplos/pedido-itens/pedido-itens.ts
+import { Component, signal } from '@angular/core';
+import { applyEach, form, FormField, min, required, SchemaPathTree } from '@angular/forms/signals';
+
+interface Item {
+  produto: string;
+  quantidade: number;
+}
+
+interface Pedido {
+  cliente: string;
+  itens: Item[];
+}
+
+function itemSchema(item: SchemaPathTree&lt;Item&gt;) {
+  required(item.produto, { message: 'Informe o produto' });
+  min(item.quantidade, 1, { message: 'A quantidade mínima é 1' });
+}
+
+@Component({
+  selector: 'app-pedido-itens',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input [formField]="pedidoForm.cliente" placeholder="Cliente" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+
+      @for (item of pedidoForm.itens; track item; let i = $index) {
+        &lt;div class="flex gap-2"&gt;
+          &lt;input [formField]="item.produto" placeholder="Produto" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+          &lt;input type="number" [formField]="item.quantidade" class="w-24 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+          &lt;button type="button" (click)="remover(i)"
+                  class="rounded-lg px-3 text-sm text-red-600 hover:bg-red-50"&gt;✕&lt;/button&gt;
+        &lt;/div&gt;
+        @for (erro of item().errorSummary(); track erro) {
+          &lt;p class="mt-1 text-sm text-red-600"&gt;Item {{ i + 1 }}: {{ erro.message }}&lt;/p&gt;
+        }
+      }
+
+      &lt;button type="button" (click)="adicionar()" class="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"&gt;+ Item&lt;/button&gt;
+      &lt;p class="text-sm text-gray-500"&gt;Pedido válido: {{ pedidoForm().valid() }}&lt;/p&gt;
+    &lt;/div&gt;
+  `,
+})
+export class PedidoItens {
+  pedidoModel = signal&lt;Pedido&gt;({
+    cliente: '',
+    itens: [{ produto: '', quantidade: 0 }],
+  });
+
+  pedidoForm = form(this.pedidoModel, (p) =&gt; {
+    required(p.cliente);
+    applyEach(p.itens, itemSchema);
+  });
+
+  adicionar() {
+    this.pedidoModel.update((m) =&gt; ({ ...m, itens: [...m.itens, { produto: '', quantidade: 1 }] }));
+  }
+
+  remover(indice: number) {
+    this.pedidoModel.update((m) =&gt; ({ ...m, itens: m.itens.filter((_, i) =&gt; i !== indice) }));
+  }
+}</code></pre>
+<div class="tip"><p>💡 <strong>Dica:</strong> <code>errors()</code> mostra apenas os erros do próprio campo; <code>errorSummary()</code> reúne os erros do campo <strong>e de todos os seus descendentes</strong> (aqui, os erros de <code>produto</code> e <code>quantidade</code> de cada item).</p></div>
+<h3>Validação assíncrona com <code>validateHttp()</code></h3>
+<p>Para validar contra o servidor (ex.: login já cadastrado). Enquanto a requisição está em andamento, <code>pending()</code> é <code>true</code>. Ela só roda depois que as regras síncronas passam, e exige <code>provideHttpClient()</code> no <code>app.config.ts</code> (veja a Configuração Inicial):</p>
+<pre class="code-block"><code>// src/app/exemplos/login-disponivel/login-disponivel.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField, required, validateHttp } from '@angular/forms/signals';
+
+interface Disponibilidade {
+  emUso: boolean;
+}
+
+@Component({
+  selector: 'app-login-disponivel',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input [formField]="usuarioForm.login" placeholder="Login" class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      @if (usuarioForm.login().pending()) {
+        &lt;p class="flex items-center gap-2 text-sm text-gray-500"&gt;
+          &lt;span class="size-4 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent"&gt;&lt;/span&gt;
+          Verificando disponibilidade...
+        &lt;/p&gt;
+      }
+      @for (erro of usuarioForm.login().errors(); track erro) {
+        &lt;p class="mt-1 text-sm text-red-600"&gt;{{ erro.message }}&lt;/p&gt;
+      }
+    &lt;/div&gt;
+  `,
+})
+export class LoginDisponivel {
+  usuarioModel = signal({ login: '' });
+
+  usuarioForm = form(this.usuarioModel, (p) =&gt; {
+    required(p.login, { message: 'O login é obrigatório' });
+
+    validateHttp(p.login, {
+      request: ({ value }) =&gt; `/api/usuarios/disponivel?login=${value()}`,
+      onSuccess: (resposta: Disponibilidade) =&gt;
+        resposta.emUso ? { kind: 'loginEmUso', message: 'Este login já está em uso' } : null,
+      onError: () =&gt; ({ kind: 'erroRede', message: 'Não foi possível verificar o login' }),
+    });
+  });
+}</code></pre>
+<div class="warning"><p>⚠️ <strong>Atenção:</strong> sem um backend respondendo em <code>/api/usuarios/disponivel</code>, a requisição falha e o campo exibe a mensagem de <code>onError</code>. Na aula de HTTP e API REST, criaremos esse endpoint.</p></div>
+<h3>Integração com Zod/Valibot (Standard Schema)</h3>
+<p>Bibliotecas compatíveis com <a href="https://standardschema.dev/">Standard Schema</a> podem ser usadas com <code>validateStandardSchema()</code>. Instale o Zod com <code>npm install zod</code>:</p>
+<pre class="code-block"><code>// src/app/exemplos/usuario-zod/usuario-zod.ts
+import { Component, signal } from '@angular/core';
+import { form, FormField, validateStandardSchema } from '@angular/forms/signals';
+import * as z from 'zod';
+
+const usuarioSchema = z.object({
+  email: z.email('Informe um e-mail válido'),
+  senha: z.string().min(8, 'A senha deve ter pelo menos 8 caracteres'),
+});
+
+@Component({
+  selector: 'app-usuario-zod',
+  imports: [FormField],
+  template: `
+    &lt;div class="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow-md"&gt;
+      &lt;input type="email" [formField]="usuarioForm.email" placeholder="E-mail"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      @for (erro of usuarioForm.email().errors(); track erro) {
+        &lt;p class="mt-1 text-sm text-red-600"&gt;{{ erro.message }}&lt;/p&gt;
+      }
+      &lt;input type="password" [formField]="usuarioForm.senha" placeholder="Senha"
+             class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" /&gt;
+      @for (erro of usuarioForm.senha().errors(); track erro) {
+        &lt;p class="mt-1 text-sm text-red-600"&gt;{{ erro.message }}&lt;/p&gt;
+      }
+    &lt;/div&gt;
+  `,
+})
+export class UsuarioZod {
+  usuarioModel = signal({ email: '', senha: '' });
+
+  usuarioForm = form(this.usuarioModel, (p) =&gt; {
+    validateStandardSchema(p, usuarioSchema);
+  });
+}</code></pre>
+</div>
+<div class="topic">
+<h2>6. Exemplo Completo: Cadastro de Aluno</h2>
+<p>Exemplo reunindo modelo tipado, objetos aninhados, arrays, validadores prontos e personalizados, validação entre campos, campo condicional, estado e envio.</p>
+<pre class="code-block"><code>// src/app/exemplos/cadastro-aluno/cadastro-aluno.ts
+import { Component, signal } from '@angular/core';
+import { JsonPipe } from '@angular/common';
+import {
+  applyEach, email, form, FormField, FormRoot, hidden, minLength,
+  pattern, required, validate,
+} from '@angular/forms/signals';
+
+interface CadastroAluno {
+  nome: string;
+  email: string;
+  matricula: string;
+  curso: string;
+  possuiDeficiencia: boolean;
+  descricaoAcessibilidade: string;
+  telefones: string[];
+  acesso: {
+    senha: string;
+    confirmarSenha: string;
+  };
+  aceitaTermos: boolean;
+}
+
+const CADASTRO_VAZIO: CadastroAluno = {
+  nome: '',
+  email: '',
+  matricula: '',
+  curso: '',
+  possuiDeficiencia: false,
+  descricaoAcessibilidade: '',
+  telefones: [''],
+  acesso: { senha: '', confirmarSenha: '' },
+  aceitaTermos: false,
+};
+
+@Component({
+  selector: 'app-cadastro-aluno',
+  imports: [FormRoot, FormField, JsonPipe],
+  templateUrl: './cadastro-aluno.html',
+  styleUrl: './cadastro-aluno.css',
+})
+export class CadastroAlunoComponent {
+  cursos = ['TSI', 'Engenharia de Computação', 'Redes de Computadores'];
+  enviado = signal(false);
+
+  cadastroModel = signal&lt;CadastroAluno&gt;(structuredClone(CADASTRO_VAZIO));
+
+  cadastroForm = form(
+    this.cadastroModel,
+    (p) =&gt; {
+      required(p.nome, { message: 'O nome é obrigatório' });
+      minLength(p.nome, 3, { message: 'O nome deve ter pelo menos 3 caracteres' });
+
+      required(p.email, { message: 'O e-mail é obrigatório' });
+      email(p.email, { message: 'Informe um e-mail válido' });
+
+      required(p.matricula, { message: 'A matrícula é obrigatória' });
+      pattern(p.matricula, /^\d{12}$/, { message: 'A matrícula deve ter 12 dígitos' });
+
+      required(p.curso, { message: 'Selecione um curso' });
+
+      hidden(p.descricaoAcessibilidade, {
+        when: ({ valueOf }) =&gt; !valueOf(p.possuiDeficiencia),
+      });
+      required(p.descricaoAcessibilidade, {
+        message: 'Descreva o recurso de acessibilidade necessário',
+      });
+
+      applyEach(p.telefones, (tel) =&gt; {
+        pattern(tel, /^\(\d{2}\) \d{4,5}-\d{4}$/, {
+          message: 'Use o formato (83) 99999-9999',
+        });
+      });
+
+      required(p.acesso.senha, { message: 'A senha é obrigatória' });
+      minLength(p.acesso.senha, 8, { message: 'A senha deve ter pelo menos 8 caracteres' });
+      validate(p.acesso.confirmarSenha, ({ value, valueOf }) =&gt;
+        value() !== valueOf(p.acesso.senha)
+          ? { kind: 'senhasDiferentes', message: 'As senhas não conferem' }
+          : null,
+      );
+
+      required(p.aceitaTermos, { message: 'Você precisa aceitar os termos' });
+    },
+    {
+      submission: {
+        action: async (f) =&gt; {
+          await this.salvar(this.cadastroModel());
+          this.enviado.set(true);
+          f().reset(structuredClone(CADASTRO_VAZIO));
+        },
+      },
+    },
+  );
+
+  adicionarTelefone() {
+    this.cadastroModel.update((m) =&gt; ({ ...m, telefones: [...m.telefones, ''] }));
+  }
+
+  removerTelefone(indice: number) {
+    this.cadastroModel.update((m) =&gt; ({
+      ...m,
+      telefones: m.telefones.filter((_, i) =&gt; i !== indice),
+    }));
+  }
+
+  private salvar(dados: CadastroAluno): Promise&lt;CadastroAluno&gt; {
+    // Simula o envio para uma API
+    return new Promise((resolve) =&gt; setTimeout(() =&gt; resolve(dados), 1500));
+  }
+}</code></pre>
+<pre class="code-block"><code>&lt;!-- src/app/exemplos/cadastro-aluno/cadastro-aluno.html --&gt;
+&lt;div class="min-h-screen bg-gray-100 px-4 py-10"&gt;
+  &lt;form [formRoot]="cadastroForm"
+        class="mx-auto max-w-xl space-y-5 rounded-2xl bg-white p-8 shadow-lg"&gt;
+    &lt;h2 class="text-2xl font-bold text-gray-800"&gt;Cadastro de Aluno&lt;/h2&gt;
+
+    &lt;div&gt;
+      &lt;label class="rotulo" for="nome"&gt;Nome&lt;/label&gt;
+      &lt;input id="nome" [formField]="cadastroForm.nome" class="campo"
+             [class.campo-invalido]="cadastroForm.nome().touched() &amp;&amp; cadastroForm.nome().invalid()" /&gt;
+      @if (cadastroForm.nome().touched() &amp;&amp; cadastroForm.nome().invalid()) {
+        &lt;p class="erro"&gt;{{ cadastroForm.nome().errors()[0].message }}&lt;/p&gt;
+      }
+    &lt;/div&gt;
+
+    &lt;div class="grid gap-5 sm:grid-cols-2"&gt;
+      &lt;div&gt;
+        &lt;label class="rotulo" for="email"&gt;E-mail&lt;/label&gt;
+        &lt;input id="email" type="email" [formField]="cadastroForm.email" class="campo"
+               [class.campo-invalido]="cadastroForm.email().touched() &amp;&amp; cadastroForm.email().invalid()" /&gt;
+        @if (cadastroForm.email().touched() &amp;&amp; cadastroForm.email().invalid()) {
+          &lt;p class="erro"&gt;{{ cadastroForm.email().errors()[0].message }}&lt;/p&gt;
+        }
+      &lt;/div&gt;
+
+      &lt;div&gt;
+        &lt;label class="rotulo" for="matricula"&gt;Matrícula&lt;/label&gt;
+        &lt;input id="matricula" [formField]="cadastroForm.matricula" class="campo"
+               [class.campo-invalido]="cadastroForm.matricula().touched() &amp;&amp; cadastroForm.matricula().invalid()" /&gt;
+        @if (cadastroForm.matricula().touched() &amp;&amp; cadastroForm.matricula().invalid()) {
+          &lt;p class="erro"&gt;{{ cadastroForm.matricula().errors()[0].message }}&lt;/p&gt;
+        }
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div&gt;
+      &lt;label class="rotulo" for="curso"&gt;Curso&lt;/label&gt;
+      &lt;select id="curso" [formField]="cadastroForm.curso" class="campo"
+              [class.campo-invalido]="cadastroForm.curso().touched() &amp;&amp; cadastroForm.curso().invalid()"&gt;
+        &lt;option value=""&gt;Selecione...&lt;/option&gt;
+        @for (curso of cursos; track curso) {
+          &lt;option [value]="curso"&gt;{{ curso }}&lt;/option&gt;
+        }
+      &lt;/select&gt;
+      @if (cadastroForm.curso().touched() &amp;&amp; cadastroForm.curso().invalid()) {
+        &lt;p class="erro"&gt;{{ cadastroForm.curso().errors()[0].message }}&lt;/p&gt;
+      }
+    &lt;/div&gt;
+
+    &lt;div class="space-y-3"&gt;
+      &lt;label class="flex items-center gap-2 text-sm text-gray-700"&gt;
+        &lt;input type="checkbox" [formField]="cadastroForm.possuiDeficiencia" class="checkbox" /&gt;
+        Necessito de recursos de acessibilidade
+      &lt;/label&gt;
+      @if (!cadastroForm.descricaoAcessibilidade().hidden()) {
+        &lt;div&gt;
+          &lt;label class="rotulo" for="acessibilidade"&gt;Quais recursos?&lt;/label&gt;
+          &lt;textarea id="acessibilidade" rows="3" class="campo"
+                    [formField]="cadastroForm.descricaoAcessibilidade"
+                    [class.campo-invalido]="cadastroForm.descricaoAcessibilidade().touched() &amp;&amp;
+                                            cadastroForm.descricaoAcessibilidade().invalid()"&gt;&lt;/textarea&gt;
+          @if (cadastroForm.descricaoAcessibilidade().touched() &amp;&amp;
+               cadastroForm.descricaoAcessibilidade().invalid()) {
+            &lt;p class="erro"&gt;{{ cadastroForm.descricaoAcessibilidade().errors()[0].message }}&lt;/p&gt;
+          }
+        &lt;/div&gt;
+      }
+    &lt;/div&gt;
+
+    &lt;fieldset class="space-y-3 rounded-xl border border-gray-200 p-4"&gt;
+      &lt;legend class="px-1 text-sm font-semibold text-gray-700"&gt;Telefones&lt;/legend&gt;
+      @for (tel of cadastroForm.telefones; track tel; let i = $index) {
+        &lt;div&gt;
+          &lt;div class="flex gap-2"&gt;
+            &lt;input [formField]="tel" placeholder="(83) 99999-9999" class="campo"
+                   [class.campo-invalido]="tel().touched() &amp;&amp; tel().invalid()" /&gt;
+            &lt;button type="button" (click)="removerTelefone(i)"
+                    class="rounded-lg px-3 text-sm text-red-600 hover:bg-red-50"&gt;
+              Remover
+            &lt;/button&gt;
+          &lt;/div&gt;
+          @if (tel().touched() &amp;&amp; tel().invalid()) {
+            &lt;p class="erro"&gt;{{ tel().errors()[0].message }}&lt;/p&gt;
+          }
+        &lt;/div&gt;
+      }
+      &lt;button type="button" (click)="adicionarTelefone()" class="botao-secundario"&gt;
+        + Adicionar telefone
+      &lt;/button&gt;
+    &lt;/fieldset&gt;
+
+    &lt;fieldset class="grid gap-5 rounded-xl border border-gray-200 p-4 sm:grid-cols-2"&gt;
+      &lt;legend class="px-1 text-sm font-semibold text-gray-700"&gt;Acesso&lt;/legend&gt;
+      &lt;div&gt;
+        &lt;label class="rotulo" for="senha"&gt;Senha&lt;/label&gt;
+        &lt;input id="senha" type="password" [formField]="cadastroForm.acesso.senha" class="campo"
+               [class.campo-invalido]="cadastroForm.acesso.senha().touched() &amp;&amp;
+                                       cadastroForm.acesso.senha().invalid()" /&gt;
+        @if (cadastroForm.acesso.senha().touched() &amp;&amp; cadastroForm.acesso.senha().invalid()) {
+          @for (erro of cadastroForm.acesso.senha().errors(); track erro) {
+            &lt;p class="erro"&gt;{{ erro.message }}&lt;/p&gt;
+          }
+        }
+      &lt;/div&gt;
+
+      &lt;div&gt;
+        &lt;label class="rotulo" for="confirmar"&gt;Confirmar senha&lt;/label&gt;
+        &lt;input id="confirmar" type="password" class="campo"
+               [formField]="cadastroForm.acesso.confirmarSenha"
+               [class.campo-invalido]="cadastroForm.acesso.confirmarSenha().touched() &amp;&amp;
+                                       cadastroForm.acesso.confirmarSenha().invalid()" /&gt;
+        @if (cadastroForm.acesso.confirmarSenha().touched() &amp;&amp;
+             cadastroForm.acesso.confirmarSenha().invalid()) {
+          &lt;p class="erro"&gt;{{ cadastroForm.acesso.confirmarSenha().errors()[0].message }}&lt;/p&gt;
+        }
+      &lt;/div&gt;
+    &lt;/fieldset&gt;
+
+    &lt;div&gt;
+      &lt;label class="flex items-center gap-2 text-sm text-gray-700"&gt;
+        &lt;input type="checkbox" [formField]="cadastroForm.aceitaTermos" class="checkbox" /&gt;
+        Li e aceito os termos de uso
+      &lt;/label&gt;
+      @if (cadastroForm.aceitaTermos().touched() &amp;&amp; cadastroForm.aceitaTermos().invalid()) {
+        &lt;p class="erro"&gt;{{ cadastroForm.aceitaTermos().errors()[0].message }}&lt;/p&gt;
+      }
+    &lt;/div&gt;
+
+    &lt;button type="submit" [disabled]="cadastroForm().submitting()" class="botao w-full"&gt;
+      {{ cadastroForm().submitting() ? 'Enviando...' : 'Cadastrar' }}
+    &lt;/button&gt;
+
+    @if (cadastroForm().dirty()) {
+      &lt;p class="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800"&gt;
+        ⚠️ Existem alterações não salvas.
+      &lt;/p&gt;
+    }
+    @if (enviado()) {
+      &lt;p class="rounded-lg border border-green-300 bg-green-50 p-3 text-sm text-green-800"&gt;
+        ✅ Cadastro realizado com sucesso!
+      &lt;/p&gt;
+    }
+  &lt;/form&gt;
+
+  &lt;div class="mx-auto mt-6 max-w-xl"&gt;
+    &lt;h3 class="mb-2 text-sm font-semibold text-gray-600"&gt;Modelo (atualizado em tempo real)&lt;/h3&gt;
+    &lt;pre class="overflow-x-auto rounded-xl bg-gray-900 p-4 text-xs text-green-300"&gt;{{ cadastroModel() | json }}&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<p>Para não repetir as mesmas listas de utilitários em cada campo, o CSS do componente define classes próprias com <code>@apply</code>:</p>
+<pre class="code-block"><code>/* src/app/exemplos/cadastro-aluno/cadastro-aluno.css */
+@reference "tailwindcss";
+
+.rotulo {
+  @apply mb-1 block text-sm font-medium text-gray-700;
+}
+
+.campo {
+  @apply w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200;
+}
+
+/* Declarada depois de .campo para sobrescrever a borda e o anel de foco */
+.campo-invalido {
+  @apply border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-200;
+}
+
+.erro {
+  @apply mt-1 text-sm text-red-600;
+}
+
+.checkbox {
+  @apply size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500;
+}
+
+.botao {
+  @apply rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.botao-secundario {
+  @apply rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100;
+}</code></pre>
+<div class="tip"><p>💡 <strong>Dica:</strong> compare este exemplo com o cadastro feito com reactive forms na aula anterior: não há <code>FormGroup</code>, <code>FormArray</code>, <code>Validators</code>, <em>getters</em> auxiliares nem a função recursiva <code>markFormGroupTouched()</code>. O <code>submit()</code> já marca tudo como <em>touched</em>.</p></div>
+</div>
+<div class="topic">
+<h2>7. Comparação: Reactive Forms × Signal Forms</h2>
+<table class="comparison-table"><thead><tr><th>Tarefa</th><th>Reactive Forms</th><th>Signal Forms</th></tr></thead><tbody><tr><td>Criar o formulário</td><td><code>fb.group({ nome: ['', Validators.required] })</code></td><td><code>form(signal({ nome: '' }), p =&gt; required(p.nome))</code></td></tr><tr><td>Ligar ao input</td><td><code>formControlName="nome"</code></td><td><code>[formField]="f.nome"</code></td></tr><tr><td>Grupo aninhado</td><td><code>formGroupName="endereco"</code></td><td><code>[formField]="f.endereco.rua"</code></td></tr><tr><td>Ler o valor</td><td><code>form.value</code> / <code>valueChanges</code></td><td><code>modelo()</code> / <code>f.nome().value()</code></td></tr><tr><td>Atualizar o valor</td><td><code>patchValue()</code> / <code>setValue()</code></td><td><code>modelo.set()</code> / <code>f.nome().value.set()</code></td></tr><tr><td>Lista dinâmica</td><td><code>FormArray</code> + <code>push()</code>/<code>removeAt()</code></td><td>Array no modelo + <code>modelo.update()</code></td></tr><tr><td>Validação entre campos</td><td>Validador no <code>FormGroup</code></td><td><code>validate()</code> com <code>valueOf()</code></td></tr><tr><td>Desabilitar campo</td><td><code>control.disable()</code> (imperativo)</td><td><code>disabled(p.campo, { when })</code> (declarativo)</td></tr><tr><td>Erros</td><td><code>control.errors?.['required']</code></td><td><code>f.campo().errors()</code> (array com <code>kind</code> e <code>message</code>)</td></tr><tr><td>Marcar como tocado no envio</td><td>Função recursiva manual</td><td><code>submit()</code> faz automaticamente</td></tr></tbody></table>
+</div>
+<div class="topic">
+<h2>8. Boas Práticas</h2>
+<ol><li><strong>Projete o modelo antes do formulário</strong>: interfaces explícitas, todos os campos inicializados, sem <code>undefined</code>;</li><li><strong>Separe modelo do formulário e modelo de domínio</strong> quando eles divergirem; converta com <code>linkedSignal()</code> e no <code>submit()</code>;</li><li><strong>Prefira estrutura estática</strong>: use <code>hidden()</code>/<code>disabled()</code> em vez de adicionar ou remover propriedades;</li><li><strong>Centralize as regras na função de schema</strong> e extraia validadores reutilizáveis para funções;</li><li><strong>Sempre forneça <code>message</code></strong> nos validadores;</li><li><strong>Mostre erros só após interação</strong>: <code>touched() &amp;&amp; invalid()</code>;</li><li><strong>Use <code>[formRoot]</code> ou <code>submit()</code></strong> para o envio e foque o primeiro campo inválido;</li><li><strong>Não confie na validação nativa do navegador</strong> nem em <code>:valid</code>/<code>:invalid</code> no CSS;</li><li><strong>Valide também no backend</strong>: validação no cliente melhora a experiência, mas não garante segurança.</li></ol>
+</div>
+<div class="topic">
+<h2>Resumo</h2>
+<p>Os Signal Forms do Angular oferecem:</p>
+<ul><li><strong>Modelo como fonte de verdade</strong>: os dados ficam em um <code>signal()</code> comum, sincronizado automaticamente com a tela via <code>[formField]</code>;</li><li><strong>Segurança de tipos</strong>: a field tree é inferida a partir do tipo do modelo;</li><li><strong>Validação declarativa e centralizada</strong>: validadores prontos, personalizados, entre campos, condicionais e assíncronos na função de schema;</li><li><strong>Estado reativo</strong>: <code>valid()</code>, <code>errors()</code>, <code>touched()</code>, <code>dirty()</code>, <code>disabled()</code>, <code>hidden()</code>... são signals, prontos para templates e <code>computed()</code>;</li><li><strong>Menos código</strong>: sem <code>FormGroup</code>, <code>FormArray</code>, <code>subscribe</code> ou funções auxiliares para marcar campos.</li></ul>
+<h3>Referências</h3>
+<ul><li><a href="https://angular.dev/guide/forms/signals/overview">Visão geral dos Signal Forms</a></li><li><a href="https://angular.dev/guide/forms/signals/models">Modelos de formulário</a></li><li><a href="https://angular.dev/guide/forms/signals/model-design">Projetando o modelo do formulário</a></li><li><a href="https://angular.dev/guide/forms/signals/field-state-management">Gerenciamento do estado dos campos</a></li><li><a href="https://angular.dev/guide/forms/signals/validation">Validação</a></li></ul>
+</div>
+        </div>
+    </div>
+</body>
+</html>
