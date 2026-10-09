@@ -6,10 +6,13 @@ import { Abas } from './abas/abas';
 import { PerfilComponent } from './aula_componentes/perfil/perfil';
 import { CampoComponent } from './aula_componentes/campo/campo';
 import { AvaliacaoComponent } from './aula_componentes/avaliacao/avaliacao';
+import { PropertyBindingComponent } from './aula_templates/property-binding/property-binding';
+import { Produtos } from './aula_templates/produtos/produtos';
+import { MeuForm } from './aula_forms/meu-form/meu-form';
 
 @Component({
   // imports: [CampoComponent, PerfilComponent, Contador, Carrinho, NomeCompletoComponent, Abas],
-  imports: [AvaliacaoComponent, CampoComponent],
+  imports: [MeuForm],
   selector: 'app-root',
   templateUrl: './app.html',
   // template: `
