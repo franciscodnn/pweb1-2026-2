@@ -9,7 +9,7 @@
 8. [Angular - Signals](./08_signals/README.md)
 9. [Angular - Componentes](./09_componentes/README.md)
 10. [Angular - Templates](./10_templates/README.md)
-11. [Angular - Formulários](./11_forms/README.md)
+11. [Angular - Formulários](./11_forms_signals/README.md)
 12. [Angular - HTTP Client](./12_angular_http_client/README.md)
 13. [Angular - Routes](./13_angular_routes/README.md)
 14. [Spring Boot - Preparação do ambiente](./14_spring_boot_introduction/README.md)

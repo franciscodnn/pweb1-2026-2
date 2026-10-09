@@ -5,9 +5,9 @@
 
 ## Introdução
 
-Os formulários são parte essencial de qualquer aplicação web. Até a versão 20, o Angular oferecia duas abordagens: **template-driven forms** e **reactive forms** (vistas na [aula anterior](../11_forms/README.md)). A partir da v21, o Angular passou a oferecer uma terceira abordagem, construída sobre **signals**: os **Signal Forms**.
+Os formulários são parte essencial de qualquer aplicação web. Até a versão 20, o Angular oferecia duas abordagens: **template-driven forms** e **reactive forms** (vistas na [aula anterior](../11_forms/README.md)). A partir da v21, o Angular passou a oferecer uma terceira abordagem, construída sobre **signals**: os **Signal Forms** [1].
 
-Construir formulários envolve várias preocupações interligadas: guardar os valores digitados, validar a entrada, controlar os estados de erro e manter a interface sincronizada com os dados. Os Signal Forms tratam dessas preocupações com:
+Construir formulários envolve várias preocupações interligadas: guardar os valores digitados, validar a entrada, controlar os estados de erro e manter a interface sincronizada com os dados. Os Signal Forms tratam dessas preocupações com [1]:
 
 - **Sincronização automática**: o modelo de dados (um `signal`) e os campos da tela ficam sempre sincronizados, nos dois sentidos;
 - **Segurança de tipos**: o formulário é inferido a partir do tipo do modelo, então o acesso a um campo inexistente é erro de compilação;
@@ -21,13 +21,13 @@ Construir formulários envolve várias preocupações interligadas: guardar os v
 | Validação | `Validators` em cada controle | Função de schema: `required(path.campo)` |
 | Reatividade | `Observable` (`valueChanges`) | Signals (`value()`, `valid()`, `errors()`) |
 
-> 💡 **Dica:** os Signal Forms são a escolha recomendada para aplicações novas construídas com signals. Em projetos que já usam reactive forms, eles continuam sendo uma opção válida.
+> 💡 **Dica:** os Signal Forms são a escolha recomendada para aplicações novas construídas com signals. Em projetos que já usam reactive forms, eles continuam sendo uma opção válida [1] [2].
 
 ## 1. Configuração Inicial
 
 ### Criando o projeto
 
-Os Signal Forms já fazem parte do pacote `@angular/forms` e são importados de `@angular/forms/signals`.
+Os Signal Forms já fazem parte do pacote `@angular/forms` e são importados de `@angular/forms/signals` [1].
 
 ```bash
 ng new app-signal-forms
@@ -37,7 +37,7 @@ ng version   # Angular v22 (Signal Forms exigem v21 ou superior)
 
 ### Tailwind CSS
 
-Todos os exemplos desta aula são estilizados com [Tailwind CSS](https://tailwindcss.com/docs/installation/framework-guides/angular) (v4). Para configurá-lo:
+Todos os exemplos desta aula são estilizados com [Tailwind CSS](https://tailwindcss.com/docs/installation/framework-guides/angular) (v4). Para configurá-lo [3]:
 
 ```bash
 npm install tailwindcss @tailwindcss/postcss postcss
@@ -74,7 +74,7 @@ Nos exemplos, repetimos sempre o mesmo conjunto de classes utilitárias:
 
 ### Configuração da aplicação
 
-Os exemplos de validação assíncrona usam `HttpClient`; por isso, registre `provideHttpClient()`:
+Os exemplos de validação assíncrona usam `HttpClient`; por isso, registre `provideHttpClient()` [4]:
 
 ```typescript
 // src/app/app.config.ts
@@ -117,7 +117,7 @@ export class App {}
 
 ### Primeiro formulário
 
-O exemplo mínimo: um modelo (`signal`), o formulário (`form()`) e a diretiva `FormField` importada no componente para ligar o campo ao `<input>`:
+O exemplo mínimo: um modelo (`signal`), o formulário (`form()`) e a diretiva `FormField` importada no componente para ligar o campo ao `<input>` [1]:
 
 ```typescript
 // src/app/exemplos/meu-form/meu-form.ts
@@ -159,7 +159,7 @@ Principais elementos da API:
 
 ### Reaproveitando classes com `@apply`
 
-Para não repetir listas longas de classes, crie classes próprias com `@apply` no CSS do componente. No Tailwind v4, o CSS do componente precisa de `@reference` para enxergar as classes do Tailwind:
+Para não repetir listas longas de classes, crie classes próprias com `@apply` no CSS do componente. No Tailwind v4, o CSS do componente precisa de `@reference` para enxergar as classes do Tailwind [5]:
 
 ```typescript
 // src/app/exemplos/login-apply/login-apply.ts
@@ -211,7 +211,7 @@ export class LoginApply {
 
 ## 2. Modelo do Formulário (Form Model)
 
-O **modelo do formulário** é a base dos Signal Forms: ele é a **única fonte de verdade** dos dados. Trata-se simplesmente de um *writable signal* criado com `signal()`.
+O **modelo do formulário** é a base dos Signal Forms: ele é a **única fonte de verdade** dos dados. Trata-se simplesmente de um *writable signal* criado com `signal()` [6].
 
 > ⚠️ **Atenção:** o modelo do formulário não tem relação com a função `model()` usada para *two-way binding* entre componentes pai e filho (aula de componentes). Aqui, o modelo é um `signal()` comum que guarda os dados do formulário.
 
@@ -251,16 +251,16 @@ export class Login {
 }
 ```
 
-A função `form()` recebe o signal e cria uma **field tree** (árvore de campos), que espelha o formato do modelo. Essa árvore é:
+A função `form()` recebe o signal e cria uma **field tree** (árvore de campos), que espelha o formato do modelo. Essa árvore é [6]:
 
 - **Navegável**: acessamos os campos filhos com ponto, por exemplo `loginForm.email`;
 - **Invocável**: chamamos o campo como função para obter o seu estado, por exemplo `loginForm.email()`.
 
-A diretiva `[formField]` liga cada `<input>` ao campo correspondente, com sincronização automática nos dois sentidos.
+A diretiva `[formField]` liga cada `<input>` ao campo correspondente, com sincronização automática nos dois sentidos [6].
 
 ### Tipando o modelo
 
-O TypeScript infere o tipo a partir do objeto literal, mas definir uma interface deixa o código mais claro e melhora o IntelliSense. Com o tipo explícito, `loginForm.email` é um `FieldTree<string>`, e acessar um campo inexistente é erro de compilação:
+O TypeScript infere o tipo a partir do objeto literal, mas definir uma interface deixa o código mais claro e melhora o IntelliSense. Com o tipo explícito, `loginForm.email` é um `FieldTree<string>`, e acessar um campo inexistente é erro de compilação [6]:
 
 ```typescript
 // src/app/exemplos/login-tipado/login-tipado.ts
@@ -297,7 +297,7 @@ export class LoginTipado {
 
 ### Inicializando todos os campos
 
-O formulário é derivado do modelo: um campo sem valor inicial **não existe** na field tree. Para campos "opcionais", use um valor vazio explícito, nunca `undefined`:
+O formulário é derivado do modelo: um campo sem valor inicial **não existe** na field tree. Para campos "opcionais", use um valor vazio explícito, nunca `undefined` [6]:
 
 - `''` para controles de texto (`<input type="text">`, `<textarea>`), que não aceitam `null`;
 - `null` para controles que aceitam ausência de valor, como `<input type="date">` com `Date | null`.
@@ -349,7 +349,7 @@ export class UsuarioInicial {
 
 ### Lendo valores
 
-Há duas formas de ler os dados: pelo **estado do campo** (`campo().value()`), ideal para valores individuais e `computed()`, ou pelo **próprio modelo** (`modelo()`), ideal quando precisamos de todos os dados (por exemplo, no envio):
+Há duas formas de ler os dados: pelo **estado do campo** (`campo().value()`), ideal para valores individuais e `computed()`, ou pelo **próprio modelo** (`modelo()`), ideal quando precisamos de todos os dados (por exemplo, no envio) [6]:
 
 ```typescript
 // src/app/exemplos/leitura/leitura.ts
@@ -399,7 +399,7 @@ export class Leitura {
 
 ### Atualizando valores por código
 
-Podemos substituir o modelo inteiro com `set()` (ex.: dados vindos de uma API ou *reset*) ou atualizar apenas um campo com `campo().value.set()`/`update()`. Nos dois casos, a tela é atualizada automaticamente:
+Podemos substituir o modelo inteiro com `set()` (ex.: dados vindos de uma API ou *reset*) ou atualizar apenas um campo com `campo().value.set()`/`update()`. Nos dois casos, a tela é atualizada automaticamente [6]:
 
 ```typescript
 // src/app/exemplos/atualizacao/atualizacao.ts
@@ -457,7 +457,7 @@ export class Atualizacao {
 
 ### Two-way binding
 
-Com `[formField]`, os dados fluem nos dois sentidos sem nenhuma inscrição (*subscribe*) ou tratamento de eventos manual:
+Com `[formField]`, os dados fluem nos dois sentidos sem nenhuma inscrição (*subscribe*) ou tratamento de eventos manual [6]:
 
 - **Usuário → modelo**: o usuário digita, a diretiva detecta, o estado do campo e o signal do modelo são atualizados;
 - **Código → tela**: o código chama `set()`/`update()`, o signal notifica e a diretiva atualiza o `<input>`.
@@ -492,7 +492,7 @@ export class TwoWay {
 
 ### Objetos aninhados
 
-Campos relacionados (como um endereço) podem ser agrupados em objetos. O acesso segue o caminho do objeto, e não é necessário nada equivalente ao `formGroupName`:
+Campos relacionados (como um endereço) podem ser agrupados em objetos. O acesso segue o caminho do objeto, e não é necessário nada equivalente ao `formGroupName` [6]:
 
 ```typescript
 // src/app/exemplos/perfil-aninhado/perfil-aninhado.ts
@@ -543,7 +543,7 @@ export class PerfilAninhado {
 
 ### Arrays
 
-Arrays substituem o `FormArray`. Para adicionar ou remover itens, basta **atualizar o modelo**. No `@for`, rastreie (`track`) pelo próprio campo, pois o Angular já mantém uma identidade estável para cada item:
+Arrays substituem o `FormArray`. Para adicionar ou remover itens, basta **atualizar o modelo**. No `@for`, rastreie (`track`) pelo próprio campo, pois o Angular já mantém uma identidade estável para cada item [6] [7]:
 
 ```typescript
 // src/app/exemplos/habilidades/habilidades.ts
@@ -593,11 +593,11 @@ export class Habilidades {
 }
 ```
 
-> ⚠️ **Atenção:** a estrutura do modelo deve usar apenas **objetos e arrays JavaScript simples**. Instâncias de classes, `Map` e `Set` não são suportados: o TypeScript aceita, mas o comportamento fica incorreto (classes perdem o protótipo e `Map`/`Set` geram árvores vazias).
+> ⚠️ **Atenção:** a estrutura do modelo deve usar apenas **objetos e arrays JavaScript simples**. Instâncias de classes, `Map` e `Set` não são suportados: o TypeScript aceita, mas o comportamento fica incorreto (classes perdem o protótipo e `Map`/`Set` geram árvores vazias) [6].
 
 ## 3. Projetando o Modelo do Formulário
 
-Como todo o formulário é derivado do modelo, vale a pena projetá-lo bem.
+Como todo o formulário é derivado do modelo, vale a pena projetá-lo bem [8].
 
 ### Boas práticas
 
@@ -606,9 +606,9 @@ Como todo o formulário é derivado do modelo, vale a pena projetá-lo bem.
 3. **Mantenha o modelo focado**: um modelo por formulário (não misture login, preferências e carrinho);
 4. **Pense na validação**: agrupe campos validados em conjunto (ex.: `novaSenha` e `confirmarSenha`);
 5. **Use tipos compatíveis com os controles**: `<select>` trabalha com `string` (mesmo que as opções pareçam números); `<input type="number">` trabalha com `number`;
-6. **Evite `undefined` e propriedades opcionais (`campo?: string`)**: `undefined` significa *ausência do campo*, e não *campo vazio*.
+6. **Evite `undefined` e propriedades opcionais (`campo?: string`)**: `undefined` significa *ausência do campo*, e não *campo vazio* [8].
 
-O exemplo a seguir aplica a prática 5: o tamanho do pacote vem de um `<select>`, então é `string`; a quantidade vem de um `<input type="number">`, então é `number`:
+O exemplo a seguir aplica a prática 5: o tamanho do pacote vem de um `<select>`, então é `string`; a quantidade vem de um `<input type="number">`, então é `number` [8]:
 
 ```typescript
 // src/app/exemplos/pedido-bebida/pedido-bebida.ts
@@ -652,7 +652,7 @@ export class PedidoBebida {
 
 ### Evite modelos com estrutura dinâmica
 
-Um modelo tem estrutura dinâmica quando suas propriedades mudam conforme o valor (por exemplo, uma união de tipos). Em vez disso, mantenha uma **estrutura estática** com todos os campos possíveis e use regras de schema para **esconder** ou **desabilitar** o que não se aplica. Assim, se o usuário alternar entre "cartão" e "pix", os dados já digitados **não se perdem**:
+Um modelo tem estrutura dinâmica quando suas propriedades mudam conforme o valor (por exemplo, uma união de tipos). Em vez disso, mantenha uma **estrutura estática** com todos os campos possíveis e use regras de schema para **esconder** ou **desabilitar** o que não se aplica. Assim, se o usuário alternar entre "cartão" e "pix", os dados já digitados **não se perdem** [8]:
 
 ```typescript
 // src/app/exemplos/pagamento/pagamento.ts
@@ -723,11 +723,11 @@ export class Pagamento {
 }
 ```
 
-A exceção são os **arrays**, cujo tamanho varia naturalmente (a estrutura de cada item, porém, deve ser a mesma).
+A exceção são os **arrays**, cujo tamanho varia naturalmente (a estrutura de cada item, porém, deve ser a mesma) [8].
 
 ### Modelo do formulário × modelo de domínio
 
-O **modelo de domínio** representa os dados como a aplicação ou a API precisa (otimizado para regras de negócio e armazenamento). O **modelo do formulário** representa a **entrada do usuário como ela aparece na tela**. Eles podem ser diferentes: na tela, data e horário de um agendamento são escolhidos em campos separados, mas no domínio são um único `Date`.
+O **modelo de domínio** representa os dados como a aplicação ou a API precisa (otimizado para regras de negócio e armazenamento). O **modelo do formulário** representa a **entrada do usuário como ela aparece na tela**. Eles podem ser diferentes: na tela, data e horário de um agendamento são escolhidos em campos separados, mas no domínio são um único `Date` [8].
 
 O arquivo abaixo define os dois modelos e as funções de conversão:
 
@@ -783,7 +783,7 @@ export class AgendamentoService {
 
 ### Convertendo entre domínio e formulário
 
-Para preencher o formulário com dados existentes (recebidos por `input()` ou de uma API), use `linkedSignal()`: ele **deriva** o modelo do formulário a partir do domínio e, ao mesmo tempo, continua **editável**. Para salvar, converta de volta dentro do `submit()`:
+Para preencher o formulário com dados existentes (recebidos por `input()` ou de uma API), use `linkedSignal()`: ele **deriva** o modelo do formulário a partir do domínio e, ao mesmo tempo, continua **editável** [8] [9]. Para salvar, converta de volta dentro do `submit()` [8]:
 
 ```typescript
 // src/app/exemplos/agendamento/editar-agendamento.ts
@@ -875,7 +875,7 @@ export class AgendamentoPagina {
 
 ## 4. Gerenciamento do Estado dos Campos
 
-Ao chamar um campo como função (`meuForm.email()`), obtemos um objeto `FieldState` com vários signals:
+Ao chamar um campo como função (`meuForm.email()`), obtemos um objeto `FieldState` com vários signals [7]:
 
 | Categoria | Signal | Descrição |
 | --- | --- | --- |
@@ -927,11 +927,11 @@ export class EstadoValidacao {
 }
 ```
 
-> 💡 **Dica:** durante uma validação assíncrona, `valid()` e `invalid()` podem ser `false` ao mesmo tempo (ainda não é válido, mas também não há erros). Por isso, para verificar se há erros, prefira `invalid()` em vez de `!valid()`.
+> 💡 **Dica:** durante uma validação assíncrona, `valid()` e `invalid()` podem ser `false` ao mesmo tempo (ainda não é válido, mas também não há erros). Por isso, para verificar se há erros, prefira `invalid()` em vez de `!valid()` [7].
 
 ### Estado de interação: touched
 
-O padrão mais comum é **mostrar erros somente depois que o usuário interagiu** com o campo (`touched() && invalid()`):
+O padrão mais comum é **mostrar erros somente depois que o usuário interagiu** com o campo (`touched() && invalid()`) [7]:
 
 ```typescript
 // src/app/exemplos/erro-apos-toque/erro-apos-toque.ts
@@ -965,7 +965,7 @@ export class ErroAposToque {
 
 ### Estado de interação: dirty
 
-O `dirty()` é útil para avisos de "alterações não salvas":
+O `dirty()` é útil para avisos de "alterações não salvas" [7]:
 
 ```typescript
 // src/app/exemplos/alteracoes/alteracoes.ts
@@ -1001,7 +1001,7 @@ export class Alteracoes {
 
 ### Revelando os erros de uma seção com `markAsTouched()`
 
-Em formulários com várias etapas, o botão "Continuar" pode marcar uma seção inteira como *touched*; todos os campos descendentes também são marcados e seus erros aparecem:
+Em formulários com várias etapas, o botão "Continuar" pode marcar uma seção inteira como *touched*; todos os campos descendentes também são marcados e seus erros aparecem [7]:
 
 ```typescript
 // src/app/exemplos/checkout/checkout.ts
@@ -1062,7 +1062,7 @@ export class Checkout {
 
 ### Estado de disponibilidade: disabled, hidden e readonly
 
-Essas regras são definidas na função de schema. A opção `when` recebe um contexto com `valueOf()`, que lê o valor de **outro** campo. O `[formField]` aplica automaticamente os atributos `disabled` e `readonly` no elemento; já o `hidden` precisa de um `@if` no template:
+Essas regras são definidas na função de schema. A opção `when` recebe um contexto com `valueOf()`, que lê o valor de **outro** campo [7]. O `[formField]` aplica automaticamente os atributos `disabled` e `readonly` no elemento; já o `hidden` precisa de um `@if` no template [10]:
 
 ```typescript
 // src/app/exemplos/disponibilidade/disponibilidade.ts
@@ -1129,11 +1129,11 @@ export class Disponibilidade {
 | `hidden()` | Campo irrelevante no contexto atual | Não (com `@if`) | Não | Não |
 | `readonly()` | Valor deve ser exibido, mas não editado | Sim | Não | Não |
 
-> ⚠️ **Atenção:** campos escondidos, desabilitados ou somente leitura **não afetam** o estado do formulário pai. Um campo obrigatório escondido não impede o envio.
+> ⚠️ **Atenção:** campos escondidos, desabilitados ou somente leitura **não afetam** o estado do formulário pai. Um campo obrigatório escondido não impede o envio [7] [10].
 
 ### Estado do formulário e propagação
 
-O formulário raiz também é um campo: `meuForm()` retorna um `FieldState` que **agrega** o estado dos filhos. Se um campo filho fica inválido, o grupo pai e o formulário inteiro também ficam inválidos. Digite nos campos e observe:
+O formulário raiz também é um campo: `meuForm()` retorna um `FieldState` que **agrega** o estado dos filhos. Se um campo filho fica inválido, o grupo pai e o formulário inteiro também ficam inválidos [7]. Digite nos campos e observe:
 
 ```typescript
 // src/app/exemplos/propagacao/propagacao.ts
@@ -1201,11 +1201,11 @@ export class Propagacao {
 | `touched()` | Pelo menos um campo tocado |
 | `dirty()` | Pelo menos um campo modificado |
 
-Use o **estado do formulário** para habilitar o botão de envio e avisos gerais; use o **estado de cada campo** para mensagens de erro e estilização.
+Use o **estado do formulário** para habilitar o botão de envio e avisos gerais; use o **estado de cada campo** para mensagens de erro e estilização [7].
 
 ### Estilizando conforme o estado
 
-Os Signal Forms **não usam** a validação nativa do navegador. Por isso, não use `:valid`/`:invalid` no CSS, nem as variantes `valid:`/`invalid:`/`user-invalid:` do Tailwind (elas também dependem da validação nativa). Em vez disso, ligue as classes do Tailwind aos signals com `[class.nome-da-classe]`:
+Os Signal Forms **não usam** a validação nativa do navegador. Por isso, não use `:valid`/`:invalid` no CSS, nem as variantes `valid:`/`invalid:`/`user-invalid:` do Tailwind (elas também dependem da validação nativa) [11]. Em vez disso, ligue as classes do Tailwind aos signals com `[class.nome-da-classe]` [7]:
 
 ```typescript
 // src/app/exemplos/estilo-estado/estilo-estado.ts
@@ -1241,7 +1241,7 @@ export class EstiloEstado {
 
 ### Envio (submit) e reset
 
-A diretiva `FormRoot` (`[formRoot]`) cuida do envio: evita o comportamento padrão do navegador, adiciona `novalidate` ao `<form>` e chama `submit()`. O `submit()` **marca todos os campos como touched** (revelando os erros) e executa a `action` **somente se o formulário for válido**. Enquanto a `action` executa, `submitting()` é `true`:
+A diretiva `FormRoot` (`[formRoot]`) cuida do envio: evita o comportamento padrão do navegador, adiciona `novalidate` ao `<form>` e chama `submit()` [12]. O `submit()` **marca todos os campos como touched** (revelando os erros) e executa a `action` **somente se o formulário for válido** [7] [12]. Enquanto a `action` executa, `submitting()` é `true` [12]:
 
 ```typescript
 // src/app/exemplos/contato/contato.ts
@@ -1329,7 +1329,7 @@ export class Contato {
 
 ### Focando o primeiro campo inválido
 
-Por acessibilidade, ao tentar enviar um formulário inválido, é uma boa prática mover o foco para o primeiro campo com erro, usando `errorSummary()` e `focusBoundControl()`. Este exemplo também mostra o envio manual com a função `submit()`, sem a diretiva `FormRoot`:
+Por acessibilidade, ao tentar enviar um formulário inválido, é uma boa prática mover o foco para o primeiro campo com erro, usando `errorSummary()` e `focusBoundControl()` [7]. Este exemplo também mostra o envio manual com a função `submit()`, sem a diretiva `FormRoot` [12]:
 
 ```typescript
 // src/app/exemplos/foco-erro/foco-erro.ts
@@ -1382,13 +1382,13 @@ export class FocoErro {
 
 ## 5. Validação
 
-A validação é definida na **função de schema**, passada como segundo argumento de `form()`. Ela recebe um `SchemaPathTree` (os "caminhos" para cada campo) e:
+A validação é definida na **função de schema**, passada como segundo argumento de `form()`. Ela recebe um `SchemaPathTree` (os "caminhos" para cada campo) e [11]:
 
 1. **Executa uma única vez**, na criação do formulário, para registrar as regras;
 2. As regras rodam **automaticamente** sempre que um valor muda;
 3. Os erros ficam disponíveis nos signals `valid()`, `invalid()`, `errors()` e `pending()`.
 
-Ordem de execução: primeiro as regras **síncronas**; as **assíncronas** só rodam se todas as síncronas passarem. Todas as regras rodam (não para no primeiro erro), então um campo pode ter vários erros ao mesmo tempo.
+Ordem de execução: primeiro as regras **síncronas**; as **assíncronas** só rodam se todas as síncronas passarem. Todas as regras rodam (não para no primeiro erro), então um campo pode ter vários erros ao mesmo tempo [11].
 
 ### Validadores prontos
 
@@ -1457,17 +1457,17 @@ export class Inscricao {
 
 | Validador | Verifica | Observação |
 | --- | --- | --- |
-| `required()` | Campo preenchido | São vazios: `null`, `undefined`, `''`, `false` e `NaN` (o `0` e `[]` não são vazios) |
+| `required()` | Campo preenchido | São vazios: `null`, `undefined`, `''`, `false` e `NaN` (o `0` e `[]` não são vazios) [11] |
 | `email()` | Formato de e-mail | Aceita `user@ifpb.edu.br`, rejeita `user@` |
-| `min()` / `max()` | Limites numéricos | Aceitam valor fixo ou função: `min(p.qtd, () => this.minimo())` |
-| `minLength()` / `maxLength()` | Tamanho | Caracteres (strings) ou elementos (arrays) |
+| `min()` / `max()` | Limites numéricos | Aceitam valor fixo ou função: `min(p.qtd, () => this.minimo())` [11] |
+| `minLength()` / `maxLength()` | Tamanho | Caracteres (strings) ou elementos (arrays) [11] |
 | `pattern()` | Expressão regular | Telefone, CEP, matrícula... |
 
-> 💡 **Dica:** sempre informe a opção `message`. Mensagens devem dizer ao usuário **como corrigir** o problema ("A senha deve ter pelo menos 8 caracteres" em vez de "Entrada inválida"). Todo erro também tem um `kind` (`'required'`, `'email'`, `'minLength'`...), útil para mapear mensagens próprias.
+> 💡 **Dica:** sempre informe a opção `message`. Mensagens devem dizer ao usuário **como corrigir** o problema ("A senha deve ter pelo menos 8 caracteres" em vez de "Entrada inválida"). Todo erro também tem um `kind` (`'required'`, `'email'`, `'minLength'`...), útil para mapear mensagens próprias [11].
 
 ### Validação condicional com `when`
 
-Todos os validadores aceitam a opção `when`; a regra só é aplicada quando a função retorna `true`:
+Todos os validadores aceitam a opção `when`; a regra só é aplicada quando a função retorna `true` [11]:
 
 ```typescript
 // src/app/exemplos/cupom/cupom.ts
@@ -1504,7 +1504,7 @@ export class Cupom {
 }
 ```
 
-Para ativar um **grupo** de regras de uma vez, use `applyWhen()`:
+Para ativar um **grupo** de regras de uma vez, use `applyWhen()` [11] [13]:
 
 ```typescript
 // src/app/exemplos/endereco-pais/endereco-pais.ts
@@ -1549,7 +1549,7 @@ export class EnderecoPais {
 
 ### Validadores personalizados com `validate()`
 
-`validate()` recebe uma função que retorna um **objeto de erro** (`kind` e `message`) quando o valor é inválido, ou `null` quando é válido:
+`validate()` recebe uma função que retorna um **objeto de erro** (`kind` e `message`) quando o valor é inválido, ou `null` quando é válido [11]:
 
 ```typescript
 // src/app/exemplos/site/site.ts
@@ -1582,7 +1582,7 @@ export class Site {
 }
 ```
 
-A função recebe um `FieldContext` com, entre outros:
+A função recebe um `FieldContext` com, entre outros [11]:
 
 | Propriedade | Descrição |
 | --- | --- |
@@ -1593,7 +1593,7 @@ A função recebe um `FieldContext` com, entre outros:
 
 ### Validadores reutilizáveis
 
-Basta encapsular o `validate()` em uma função que recebe um `SchemaPath`:
+Basta encapsular o `validate()` em uma função que recebe um `SchemaPath` [11]:
 
 ```typescript
 // src/app/exemplos/validadores/cpf.validator.ts
@@ -1640,7 +1640,7 @@ export class AlunoCpf {
 }
 ```
 
-Schemas inteiros também podem ser reutilizados: `schema()` cria o schema e `apply()` o aplica a um caminho:
+Schemas inteiros também podem ser reutilizados: `schema()` cria o schema e `apply()` o aplica a um caminho [13]:
 
 ```typescript
 // src/app/exemplos/enderecos/enderecos.ts
@@ -1692,7 +1692,7 @@ export class Enderecos {
 
 ### Validação entre campos (cross-field)
 
-Com `valueOf()`, uma regra pode comparar campos. Ela é reavaliada automaticamente quando **qualquer um** dos dois muda:
+Com `valueOf()`, uma regra pode comparar campos. Ela é reavaliada automaticamente quando **qualquer um** dos dois muda [11]:
 
 ```typescript
 // src/app/exemplos/troca-senha/troca-senha.ts
@@ -1744,7 +1744,7 @@ export class TrocaSenha {
 }
 ```
 
-Para regras que envolvem uma subárvore inteira e precisam apontar o erro para um campo específico, use `validateTree()`, informando o campo em `fieldTree`:
+Para regras que envolvem uma subárvore inteira e precisam apontar o erro para um campo específico, use `validateTree()`, informando o campo em `fieldTree` [11]:
 
 ```typescript
 // src/app/exemplos/periodo/periodo.ts
@@ -1861,11 +1861,11 @@ export class PedidoItens {
 }
 ```
 
-> 💡 **Dica:** `errors()` mostra apenas os erros do próprio campo; `errorSummary()` reúne os erros do campo **e de todos os seus descendentes** (aqui, os erros de `produto` e `quantidade` de cada item).
+> 💡 **Dica:** `errors()` mostra apenas os erros do próprio campo; `errorSummary()` reúne os erros do campo **e de todos os seus descendentes** (aqui, os erros de `produto` e `quantidade` de cada item) [14].
 
 ### Validação assíncrona com `validateHttp()`
 
-Para validar contra o servidor (ex.: login já cadastrado). Enquanto a requisição está em andamento, `pending()` é `true`. Ela só roda depois que as regras síncronas passam, e exige `provideHttpClient()` no `app.config.ts` (veja a Configuração Inicial):
+Para validar contra o servidor (ex.: login já cadastrado). Enquanto a requisição está em andamento, `pending()` é `true`. Ela só roda depois que as regras síncronas passam [11], e exige `provideHttpClient()` no `app.config.ts` (veja a Configuração Inicial) [4]:
 
 ```typescript
 // src/app/exemplos/login-disponivel/login-disponivel.ts
@@ -1914,7 +1914,7 @@ export class LoginDisponivel {
 
 ### Integração com Zod/Valibot (Standard Schema)
 
-Bibliotecas compatíveis com [Standard Schema](https://standardschema.dev/) podem ser usadas com `validateStandardSchema()`. Instale o Zod com `npm install zod`:
+Bibliotecas compatíveis com [Standard Schema](https://standardschema.dev/) podem ser usadas com `validateStandardSchema()` [11] [15]. Instale o Zod com `npm install zod` [16]:
 
 ```typescript
 // src/app/exemplos/usuario-zod/usuario-zod.ts
@@ -2301,8 +2301,30 @@ Os Signal Forms do Angular oferecem:
 
 ### Referências
 
-- [Visão geral dos Signal Forms](https://angular.dev/guide/forms/signals/overview)
-- [Modelos de formulário](https://angular.dev/guide/forms/signals/models)
-- [Projetando o modelo do formulário](https://angular.dev/guide/forms/signals/model-design)
-- [Gerenciamento do estado dos campos](https://angular.dev/guide/forms/signals/field-state-management)
-- [Validação](https://angular.dev/guide/forms/signals/validation)
+As páginas do angular.dev foram consultadas em outubro de 2026 e descrevem o **Angular v22**, versão em que os Signal Forms aparecem como estáveis [2].
+
+1. [Visão geral dos Signal Forms](https://angular.dev/guide/forms/signals/overview): motivação, pré-requisitos e configuração.
+   - [Por que Signal Forms?](https://angular.dev/guide/forms/signals/overview#why-signal-forms) · [Pré-requisitos (v21+)](https://angular.dev/guide/forms/signals/overview#prerequisites) · [Configuração](https://angular.dev/guide/forms/signals/overview#setup)
+2. [Comparação entre as abordagens de formulários](https://angular.dev/guide/forms/signals/comparison): Signal Forms × Reactive Forms × Template-driven, com recomendações de uso e status de estabilidade.
+   - [Comparação rápida](https://angular.dev/guide/forms/signals/comparison#quick-comparison) · [Escolhendo a abordagem](https://angular.dev/guide/forms/signals/comparison#choose-your-approach)
+3. [Instalando o Tailwind CSS com Angular](https://tailwindcss.com/docs/installation/framework-guides/angular): passo a passo oficial do Tailwind v4 em projetos Angular.
+4. [Configurando o HttpClient](https://angular.dev/guide/http/setup#providing-httpclient-through-dependency-injection): como registrar `provideHttpClient()` no `app.config.ts`.
+5. [Diretiva `@reference` do Tailwind](https://tailwindcss.com/docs/functions-and-directives#reference-directive): uso de `@apply` em CSS de componentes (veja também [`@apply`](https://tailwindcss.com/docs/functions-and-directives#apply-directive)).
+6. [Modelos de formulário](https://angular.dev/guide/forms/signals/models): criação do modelo, leitura, atualização, sincronização e estruturas suportadas.
+   - [Criando modelos](https://angular.dev/guide/forms/signals/models#creating-models) · [Estruturas suportadas](https://angular.dev/guide/forms/signals/models#supported-model-structures) · [Tipos TypeScript](https://angular.dev/guide/forms/signals/models#using-typescript-types) · [Inicializando os campos](https://angular.dev/guide/forms/signals/models#initializing-all-fields) · [Lendo valores](https://angular.dev/guide/forms/signals/models#reading-model-values) · [Atualizando valores](https://angular.dev/guide/forms/signals/models#updating-form-models-programmatically) · [Two-way binding](https://angular.dev/guide/forms/signals/models#two-way-data-binding) · [Objetos aninhados](https://angular.dev/guide/forms/signals/models#working-with-nested-objects) · [Arrays](https://angular.dev/guide/forms/signals/models#working-with-arrays)
+7. [Gerenciamento do estado dos campos](https://angular.dev/guide/forms/signals/field-state-management): signals de validação, interação e disponibilidade, propagação, estilização, envio e foco.
+   - [Signals do estado](https://angular.dev/guide/forms/signals/field-state-management#field-state-signals) · [Verificando a validade](https://angular.dev/guide/forms/signals/field-state-management#checking-validity) · [Touched](https://angular.dev/guide/forms/signals/field-state-management#touched-state) · [Dirty](https://angular.dev/guide/forms/signals/field-state-management#dirty-state) · [Disponibilidade](https://angular.dev/guide/forms/signals/field-state-management#availability-state) · [Propagação](https://angular.dev/guide/forms/signals/field-state-management#state-propagation) · [Estado do formulário × do campo](https://angular.dev/guide/forms/signals/field-state-management#when-to-use-form-level-vs-field-level) · [Erros após interação](https://angular.dev/guide/forms/signals/field-state-management#conditional-error-display) · [Arrays no `@for`](https://angular.dev/guide/forms/signals/field-state-management#tracking-values-for-array-fields) · [Envio](https://angular.dev/guide/forms/signals/field-state-management#form-submission) · [Estilização](https://angular.dev/guide/forms/signals/field-state-management#styling-based-on-validation-state) · [Focando o primeiro campo inválido](https://angular.dev/guide/forms/signals/field-state-management#focusing-the-first-invalid-field-on-submission)
+8. [Projetando o modelo do formulário](https://angular.dev/guide/forms/signals/model-design): boas práticas, estrutura estática e conversão entre modelo de domínio e modelo do formulário.
+   - [Modelo de domínio × modelo do formulário](https://angular.dev/guide/forms/signals/model-design#form-model-vs-domain-model) · [Boas práticas](https://angular.dev/guide/forms/signals/model-design#form-model-best-practices) · [Tipos compatíveis com os controles](https://angular.dev/guide/forms/signals/model-design#match-data-types-to-ui-controls) · [Evite `undefined`](https://angular.dev/guide/forms/signals/model-design#avoid-undefined) · [Evite estrutura dinâmica](https://angular.dev/guide/forms/signals/model-design#avoid-models-with-dynamic-structure) · [Exceções (arrays)](https://angular.dev/guide/forms/signals/model-design#exceptions) · [Domínio → formulário](https://angular.dev/guide/forms/signals/model-design#domain-model-to-form-model) · [Formulário → domínio](https://angular.dev/guide/forms/signals/model-design#form-model-to-domain-model)
+9. [Estado dependente com `linkedSignal`](https://angular.dev/guide/signals/linked-signal): signal derivado de outro e que continua editável.
+10. [Lógica de formulário](https://angular.dev/guide/forms/signals/form-logic): regras `disabled()`, `hidden()` e `readonly()`.
+    - [`disabled()`](https://angular.dev/guide/forms/signals/form-logic#prevent-field-updates-with-disabled) · [`hidden()`](https://angular.dev/guide/forms/signals/form-logic#configuring-hidden-state-on-fields) · [`readonly()`](https://angular.dev/guide/forms/signals/form-logic#display-uneditable-fields-with-readonly) · [Qual escolher](https://angular.dev/guide/forms/signals/form-logic#choose-between-hidden-disabled-and-readonly)
+11. [Validação](https://angular.dev/guide/forms/signals/validation): função de schema, validadores prontos, personalizados, entre campos, assíncronos e integração com Standard Schema.
+    - [Função de schema](https://angular.dev/guide/forms/signals/validation#the-schema-function) · [Ordem de execução](https://angular.dev/guide/forms/signals/validation#validation-timing) · [Validação nativa do HTML](https://angular.dev/guide/forms/signals/validation#native-html-validation) · [`required()`](https://angular.dev/guide/forms/signals/validation#required) · [`min()`/`max()`](https://angular.dev/guide/forms/signals/validation#min-and-max) · [`minLength()`/`maxLength()`](https://angular.dev/guide/forms/signals/validation#minlength-and-maxlength) · [Estrutura dos erros](https://angular.dev/guide/forms/signals/validation#error-structure) · [Mensagens personalizadas](https://angular.dev/guide/forms/signals/validation#custom-error-messages) · [`validate()`](https://angular.dev/guide/forms/signals/validation#using-validate) · [Validadores reutilizáveis](https://angular.dev/guide/forms/signals/validation#reusable-validation-rules) · [Entre campos](https://angular.dev/guide/forms/signals/validation#cross-field-validation) · [`validateTree()`](https://angular.dev/guide/forms/signals/validation#using-validatetree) · [Condicional](https://angular.dev/guide/forms/signals/validation#conditional-validation) · [`validateHttp()`](https://angular.dev/guide/forms/signals/validation#using-validatehttp) · [Standard Schema](https://angular.dev/guide/forms/signals/validation#integration-with-schema-validation-libraries)
+12. [Envio de formulários](https://angular.dev/guide/forms/signals/form-submission): diretiva `FormRoot`, função `submit()` e `submitting()`.
+    - [O que o `submit()` faz](https://angular.dev/guide/forms/signals/form-submission#what-does-submit-do) · [`FormRoot`](https://angular.dev/guide/forms/signals/form-submission#setting-up-form-submission-with-formroot) · [`submitting()`](https://angular.dev/guide/forms/signals/form-submission#showing-submission-state-with-submitting) · [Envio manual](https://angular.dev/guide/forms/signals/form-submission#manual-submission-with-submit)
+13. [Schemas e composição](https://angular.dev/guide/forms/signals/schemas): `schema()`, `apply()`, `applyWhen()` e `applyEach()`.
+    - [`schema()`](https://angular.dev/guide/forms/signals/schemas#create-reusable-schemas-with-schema) · [`apply()`](https://angular.dev/guide/forms/signals/schemas#using-the-schema-with-apply) · [`applyWhen()`](https://angular.dev/guide/forms/signals/schemas#conditional-schemas-with-applywhen) · [`applyEach()`](https://angular.dev/guide/forms/signals/schemas#array-items-with-applyeach)
+14. [API `FieldState`](https://angular.dev/api/forms/signals/FieldState): referência de todos os signals do estado do campo (ex.: diferença entre `errors()` e `errorSummary()`).
+15. [Standard Schema](https://standardschema.dev/): especificação de interfaces comuns entre bibliotecas de validação.
+16. [Zod: instalação](https://zod.dev/#installation): site oficial do Zod (veja também [mensagens de erro personalizadas](https://zod.dev/error-customization#the-error-param)).
