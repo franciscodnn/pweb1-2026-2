@@ -1,6 +1,6 @@
 [main](../../README.md)
 
-# Aula 12 - HTTP Client no Angular v19 - Aula Completa
+# Aula 13 - HTTP Client no Angular v19 - Aula Completa
 
 ## Objetivos da Aula
 - Entender o que é o HttpClient do Angular
