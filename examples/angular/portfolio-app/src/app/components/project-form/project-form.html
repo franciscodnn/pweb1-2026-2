@@ -1,0 +1,66 @@
+<form [formRoot]="projectForm"
+  class="bg-slate-100 dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 space-y-4">
+  <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Novo projeto</h3>
+
+  <div>
+    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">
+      Título
+      <input [formField]="projectForm.title"
+        class="mt-1 w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white px-3 py-2 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800" />
+    </label>
+    @if (projectForm.title().touched() && projectForm.title().invalid()) {
+      <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ projectForm.title().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">
+      Descrição
+      <textarea [formField]="projectForm.description" rows="3"
+        class="mt-1 w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white px-3 py-2 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800"></textarea>
+    </label>
+    @if (projectForm.description().touched() && projectForm.description().invalid()) {
+      <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ projectForm.description().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">
+      Tecnologias <span class="font-normal text-slate-500">(separadas por vírgula)</span>
+      <input [formField]="projectForm.techs" placeholder="Angular, TypeScript, Tailwind CSS"
+        class="mt-1 w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white px-3 py-2 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800" />
+    </label>
+    @if (projectForm.techs().touched() && projectForm.techs().invalid()) {
+      <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ projectForm.techs().errors()[0].message }}</p>
+    }
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="sm:col-span-2">
+      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">
+        URL do repositório
+        <input type="url" [formField]="projectForm.repoUrl" placeholder="https://github.com/..."
+          class="mt-1 w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white px-3 py-2 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800" />
+      </label>
+      @if (projectForm.repoUrl().touched() && projectForm.repoUrl().invalid()) {
+        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ projectForm.repoUrl().errors()[0].message }}</p>
+      }
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">
+        Anos de experiência
+        <input type="number" [formField]="projectForm.yearsExperience"
+          class="mt-1 w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white px-3 py-2 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 dark:focus:ring-indigo-800" />
+      </label>
+      @if (projectForm.yearsExperience().touched() && projectForm.yearsExperience().invalid()) {
+        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ projectForm.yearsExperience().errors()[0].message }}</p>
+      }
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="projectForm().submitting()"
+    class="w-full rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50">
+    Cadastrar projeto
+  </button>
+</form>

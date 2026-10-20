@@ -1,20 +1,14 @@
 import { Component, signal, inject } from '@angular/core';
 import { ThemeButton } from './components/theme-button/theme-button';
 import { ProjectCard } from './components/project-card/project-card';
+import { ProjectForm } from './components/project-form/project-form';
+import { ProjectDetail } from './components/project-detail/project-detail';
 import { Database } from './services/database';
-
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  techs: string[];
-  repoUrl: string;
-  yearsExperience: number;
-}
+import { Project } from './models/project';
 
 @Component({
   selector: 'app-root',
-  imports: [ThemeButton, ProjectCard],
+  imports: [ThemeButton, ProjectCard, ProjectForm, ProjectDetail],
   templateUrl: './app.html',
   styleUrl: './app.css',
   host: { '[class.dark]': 'darkMode()' },
@@ -23,6 +17,10 @@ export class App {
   protected readonly darkMode = signal(true);
 
   private database = inject(Database);
+
+  // projeto exibido no detalhe (null = detalhe fechado)
+  protected readonly selectedProject = signal<Project | null>(null);
+  protected readonly showForm = signal(false);
 
   constructor() {
     this.database.add(

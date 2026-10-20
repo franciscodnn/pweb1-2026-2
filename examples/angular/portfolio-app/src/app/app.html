@@ -23,7 +23,19 @@
   <!-- Seção: Projetos -->
   <section class="bg-slate-50 dark:bg-slate-950 px-6 py-16">
     <div class="max-w-4xl mx-auto">
-      <h2 class="text-2xl font-bold text-slate-900 dark:text-white text-center mb-10">Projetos</h2>
+      <div class="flex items-center justify-between mb-10">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Projetos</h2>
+        <button type="button" (click)="showForm.update(show => !show)"
+          class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
+          {{ showForm() ? 'Cancelar' : '+ Novo projeto' }}
+        </button>
+      </div>
+
+      @if (showForm()) {
+        <div class="mb-10">
+          <app-project-form (saved)="showForm.set(false)" />
+        </div>
+      }
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @for (project of projects(); track project.id) {
@@ -33,11 +45,16 @@
             [techs]="project.techs"
             [repoUrl]="project.repoUrl"
             [yearsExperience]="project.yearsExperience"
+            (selected)="selectedProject.set(project)"
           />
         }
       </div>
     </div>
   </section>
+
+  @if (selectedProject(); as project) {
+    <app-project-detail [project]="project" (close)="selectedProject.set(null)" />
+  }
 
 </main>
 

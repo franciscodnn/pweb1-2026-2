@@ -1,14 +1,6 @@
 import { Service, signal, inject } from '@angular/core';
 import { Logger } from './logger';
-
-interface Project {
-    id: number;
-    title: string;
-    description: string;
-    techs: string[];
-    repoUrl: string;
-    yearsExperience: number;
-  }
+import { Project } from '../models/project';
 
 @Service()
 export class Database {

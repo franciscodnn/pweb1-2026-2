@@ -1,4 +1,4 @@
-import { Component, input, numberAttribute } from '@angular/core';
+import { Component, input, numberAttribute, output } from '@angular/core';
 
 @Component({
   selector: 'app-project-card',
@@ -12,4 +12,7 @@ export class ProjectCard {
   description = input('');
   techs = input<string[]>([]);
   repoUrl = input('');
+
+  // avisa o pai que o card foi clicado
+  selected = output<void>();
 }
