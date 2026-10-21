@@ -44,4 +44,14 @@ export class Database {
         );
         */
     }
+
+    get(id: number): <Project | undefined> {
+        const proj: <Project | undefined> = this.projects().find(
+            (project) => project.id === 1
+        );
+
+        if(proj === undefined) return undefined;
+
+        return ProjectCard;
+    }
 }
