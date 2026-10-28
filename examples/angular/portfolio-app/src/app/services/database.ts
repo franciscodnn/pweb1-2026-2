@@ -1,10 +1,28 @@
 import { Service, signal, inject } from '@angular/core';
 import { Logger } from './logger';
 import { Project } from '../models/project';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment.development';
 
 @Service()
 export class Database {
     private logger = inject(Logger);
+    private http = inject(HttpClient);
+
+    // URL = onde está o servico???
+    // APIKey = qual é a chave para acessar o servico???
+
+    private supabaseUrl = environment.supabaseUrl;
+    private supabaseKey = environment.supabaseKey;
+
+    private get headers() {
+        return {
+            'apikey': this.supabaseKey,
+            'Authorization': `Bearer ${this.supabaseKey}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
+        };
+    }
 
     public readonly projects = signal<Project[]>([
     {
@@ -45,13 +63,49 @@ export class Database {
         */
     }
 
-    get(id: number): <Project | undefined> {
-        const proj: <Project | undefined> = this.projects().find(
-            (project) => project.id === 1
+    addProjectSupabase(projeto: Project) {
+        // projeto["repo_url"] = projeto["repoUrl"];
+
+        console.log(projeto);
+        this.http.post<Project>(
+            `${this.supabaseUrl}/project`,
+            projeto,
+            { headers: this.headers }).subscribe({
+                next: (data) => {
+                    console.log('Objeto armazenado');
+                },
+                error: (erro) => {
+                    
+                    console.log(erro);
+                }
+            });
+    }
+
+    get(id: number): (Project | undefined) {
+        const proj: (Project | undefined) = this.projects()
+          .find(
+            (project) => project.id === id
         );
 
-        if(proj === undefined) return undefined;
+        // if(proj === undefined) return undefined;
 
-        return ProjectCard;
+        return proj ?? undefined;
+    }
+
+    loadProjectsFromSupabase() {
+        // Método GET do HTTP
+        this.http.get<Project[]>(
+            `${this.supabaseUrl}/project`,
+            { headers : this.headers }).subscribe(
+            {
+                next: (data) => {
+                    this.projects.set([...this.projects(), ...data]);
+                    console.log(data);
+                },
+                error: (erro) => {
+                    console.log(erro);
+                }
+            }
+        );
     }
 }

@@ -13,8 +13,10 @@ import { RouterLink } from '@angular/router';
 export class ContainerCards {
   private database = inject(Database);
   protected readonly selectedProject = signal<Project | null>(null);
+  protected projects = this.database.projects;
 
-  projects(): Project[] {
-    return this.database.projects();
+  constructor() {
+    this.database.loadProjectsFromSupabase();
   }
+  
 }

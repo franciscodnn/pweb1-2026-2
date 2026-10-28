@@ -8,7 +8,7 @@ import { RouterOutlet, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, ThemeButton, ProjectForm],
+  imports: [RouterOutlet, RouterLink, ThemeButton],
   templateUrl: './app.html',
   styleUrl: './app.css',
   host: { '[class.dark]': 'darkMode()' },

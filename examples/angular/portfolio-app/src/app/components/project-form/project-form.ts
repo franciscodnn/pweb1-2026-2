@@ -48,7 +48,8 @@ export class ProjectForm {
       submission: {
         action: async (f) => {
           const project = this.toProject(this.projectModel());
-          this.database.add(project);
+          // this.database.add(project);
+          this.database.addProjectSupabase(project);
           this.saved.emit(project);
           f().reset({ ...PROJECT_INICIAL });
         },
