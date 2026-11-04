@@ -64,18 +64,20 @@ export class Database {
     }
 
     addProjectSupabase(projeto: Project) {
-        // projeto["repo_url"] = projeto["repoUrl"];
 
-        console.log(projeto);
+        const { repoUrl, id, ...rest } = projeto;
+        
+        const novoProjeto = { ...rest, ['repo_url']: repoUrl };
+
         this.http.post<Project>(
             `${this.supabaseUrl}/project`,
-            projeto,
-            { headers: this.headers }).subscribe({
+            novoProjeto,
+            { headers: this.headers })
+            .subscribe({
                 next: (data) => {
                     console.log('Objeto armazenado');
                 },
                 error: (erro) => {
-                    
                     console.log(erro);
                 }
             });
@@ -99,7 +101,7 @@ export class Database {
             { headers : this.headers }).subscribe(
             {
                 next: (data) => {
-                    this.projects.set([...this.projects(), ...data]);
+                    this.projects.set([...data]);
                     console.log(data);
                 },
                 error: (erro) => {

@@ -1,0 +1,13 @@
+@supabaseUrl = 
+@supabaseKey = 
+
+### GET
+GET {{supabaseUrl}}/project?select=*
+apikey: {{supabaseKey}}
+Authorization: Bearer {{supabaseKey}}
+
+### DELETE
+# /project?some_column=eq.someValue'
+DELETE {{supabaseUrl}}/project?id=eq.1
+apikey: {{supabaseKey}}
+Authorization: Bearer {{supabaseKey}}
