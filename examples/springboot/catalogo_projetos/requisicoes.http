@@ -1,0 +1,40 @@
+@baseUrl = http://localhost:8080/projects
+
+### Listar (view Resumo)
+GET {{baseUrl}}
+
+### Filtrar com @RequestParam
+GET {{baseUrl}}?tech=Angular&limit=5
+
+### Detalhar (view Detalhe)
+GET {{baseUrl}}/1
+
+### Id inválido (não casa com {id:\d+}) -> 404
+GET {{baseUrl}}/abc
+
+### Criar -> 201 + Location
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "title": "Task Manager",
+  "description": "Gerenciador de tarefas",
+  "techs": ["Angular", "Spring Boot"],
+  "repoUrl": "https://github.com/exemplo/tasks",
+  "yearsExperience": 1
+}
+
+### Atualizar
+PUT {{baseUrl}}/1
+Content-Type: application/json
+
+{
+  "title": "Portfólio v2",
+  "description": "SPA com Angular",
+  "techs": ["Angular"],
+  "repoUrl": "https://github.com/exemplo/portfolio",
+  "yearsExperience": 2
+}
+
+### Remover -> 204
+DELETE {{baseUrl}}/2
