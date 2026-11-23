@@ -1,0 +1,19 @@
+
+### POST
+POST http://localhost:8080/projects
+Content-Type: application/json
+
+{
+    "title": "Task Manager",
+    "description": "Gerenciador de tarefas",
+    "techs": [
+        "Java",
+        "Spring Boot",
+        "React"
+    ],
+    "repoUrl": "github.com",
+    "yearsExperience": 1
+}
+
+### DELETE
+DELETE http://localhost:8080/projects/1
