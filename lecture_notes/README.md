@@ -14,8 +14,11 @@
 13. [Angular - HTTP Client](./13_angular_http_client/README.md)
 14. [Angular - Routes](./14_angular_routes/README.md)
 15. [Spring Boot - Preparação do ambiente](./14_spring_boot_introduction/README.md)
-16. [Spring Boot - Controladores (Controllers)](./15_spring_boot_controllers/README.md)
+17. [Spring Boot - Injeção de Dependência (DI) / Inversão de Control (IoC)](./16_di_ioc/README.md)
+17. [Spring Boot - Controllers](./15_spring_boot_controllers/README.md)
+18. [Spring Boot - Services](./17_spring_boot_services/README.md)
 <!--
+[Spring Boot - Controllers (versão anterior)](./15_spring_boot_controllers/README.md)
 16. [Arquitetura - Métodos HTTP](./14_api_rest/README.md)
 17. [Arquitetura - Microsserviços](./15_architecture/README.md)
 17. [Spring Boot - Injeção de Dependência (DI) / Inversão de Control (IoC)](./16_di_ioc/README.md)
